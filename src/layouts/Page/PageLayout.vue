@@ -31,10 +31,10 @@ export default {
     Footer
   },
   async created () {
-    // this.isAuthenticated()
+    this.isAuthenticated()
   },
   methods: {
-    ...mapActions(['auth-store/getBiodata']),
+    ...mapActions('AuthStore', ['getBiodata']),
     isAuthenticated () {
       if (!this.$CredMng.credentialKeyTake()) {
         return this.$router.push({ name: 'Login' })

@@ -45,6 +45,12 @@ const routes = [
         path: '/',
         component: () => import('pages/Page/Home.vue'),
         meta: { title: 'Home Page' }
+      },
+      {
+        name: 'Profile',
+        path: '/user/profile',
+        // component: () => import('pages/Page/Home.vue'),
+        meta: { title: 'Profile Page' }
       }
     ]
   },

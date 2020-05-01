@@ -17,7 +17,7 @@
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
             <img
-              :src="`${this.$AppHelper.apiEndpoint()}`"
+              :src="`${this.$AppHelper.apiEndpoint()}${thisBiodata.profile_img}`"
               class="img-circle elevation-2"
               alt="Profile Image"
             />
@@ -26,11 +26,10 @@
             <router-link
               :to="{ name: 'Profile' }"
               class="d-block"
-            ></router-link>
+            >{{thisBiodata.name}}</router-link>
           </div>
         </div>
         <AllowLink />
-        {{ thisBiodata }}
       </div>
       <nav class="mt-2">
         <ul
@@ -54,10 +53,7 @@ export default {
     AllowLink
   },
   computed: {
-    ...mapGetters(['authStore/thisBiodata'])
-  },
-  created () {
-    console.log(this.$store.state.authStore.thisBiodata)
+    ...mapGetters('AuthStore', ['thisBiodata'])
   }
 }
 </script>

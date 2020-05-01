@@ -44,7 +44,7 @@ import Swal from 'sweetalert2'
 export default {
   name: 'AllowLink',
   computed: {
-    ...mapGetters(['authStore/sidebarLink'])
+    ...mapGetters('AuthStore', ['sidebarLink'])
   },
   methods: {
     getPath () {

@@ -1,4 +1,3 @@
-/*
-export function someMutation (state) {
+export default {
+  setBiodata: (state, data) => (state.thisBiodata = data)
 }
-*/
