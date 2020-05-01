@@ -35,6 +35,18 @@ const routes = [
         meta: { title: 'Verifiying Email' }
       }
     ]
+  },
+  {
+    path: '/home',
+    component: () => import('layouts/Page/PageLayout.vue'),
+    children: [
+      {
+        name: 'Home',
+        path: '/',
+        component: () => import('pages/Page/Home.vue'),
+        meta: { title: 'Home Page' }
+      }
+    ]
   }
 ]
 

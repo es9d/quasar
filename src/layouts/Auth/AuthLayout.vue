@@ -6,21 +6,6 @@
 
 <script>
 export default {
-  name: 'AuthLayout',
-  metaInfo () {
-    return {
-      title: this.$route.meta.title,
-      titleTemplate: '%s :: ' + this.appname,
-      htmlAttrs: {
-        lang: 'en',
-        amp: true
-      }
-    }
-  },
-  data () {
-    return {
-      appname: 'Apps'
-    }
-  }
+  name: 'AuthLayout'
 }
 </script>

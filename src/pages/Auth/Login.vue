@@ -1,6 +1,6 @@
 <template>
   <div class="login-box">
-    <div class="login-logo text-white">APPS</div>
+    <div class="login-logo text-white">{{ this.$AppHelper.appName() }}</div>
     <div class="card">
       <div class="card-body login-card-body">
         <p
@@ -9,7 +9,7 @@
         >Sign in to start your session</p>
         <form
           id="form-login"
-          @submit.prevent="postLogin"
+          @submit.prevent="submitLogin"
         >
           <div class="input-group mb-3">
             <input
@@ -46,7 +46,7 @@
             </div>
           </div>
           <div class="row mb-3">
-            <div class="offset-0 offset-md-7 col-12 col-md-5">
+            <div class="offset-0 offset-sm-7 col-12 col-sm-5">
               <button
                 type="submit"
                 class="btn btn-primary btn-block text-bold"
@@ -79,22 +79,129 @@
 </template>
 
 <script>
+import AwSleep from 'src/third-party/helper/await-sleep.min'
+import ForgeJs from 'src/third-party/library/forgejs.min'
+import RegexValidation from 'src/third-party/helper/regex-validation.min'
 export default {
   name: 'Login',
   methods: {
-    postLogin () {
-      alert('ok')
+    async submitLogin () {
+      this.inputClear()
+      if (this.thisEmail && this.thisPassword) {
+        const mail = RegexValidation.mailRegex(this.thisEmail)
+        if (mail.result) {
+          this.$('#input-submit').prop('disabled', true)
+          this.$('#view-login-msg').html(
+            this.spanMessage(
+              'success',
+              'Login... <i class="fas fa-spinner fa-pulse"></i>'
+            )
+          )
+          await this.postLogin(
+            this.thisEmail,
+            ForgeJs.encryptPassword(this.thisPassword)
+          )
+        } else {
+          this.$Toastr.toastInfo(mail.message)
+        }
+      }
+      if (!this.thisEmail) {
+        this.$('#input-email').attr('placeholder', 'E-Mail cannot be empty')
+        this.inputInValid('#input-email')
+      }
+      if (!this.thisPassword) {
+        this.$('#input-password').attr(
+          'placeholder',
+          'Password cannot be empty'
+        )
+        this.inputInValid('#input-password')
+      }
+    },
+    postLogin (email, password) {
+      this.$axios
+        .getCookies()
+        .then(() => {
+          this.$axios
+            .postLogin(email, password)
+            .then(response => this.loginResponse(response.data))
+            .catch(error => this.catchError(error))
+        })
+        .catch(error => this.catchError(error))
+    },
+    async loginResponse (data) {
+      await AwSleep.sleep(1000)
+      if (data.status === 'success') {
+        this.$CredMng.credentialKeySave(
+          data.response_data.access_token,
+          this.thisRemember
+        )
+        this.$('#view-login-msg').html(
+          this.spanMessage(
+            'success',
+            'Welcome ' + data.response_data.account_name
+          ))
+        await AwSleep.sleep(1000)
+        this.$('#view-login-msg').html(
+          this.spanMessage(
+            'success',
+            'Please waitt... <i class="fas fa-spinner fa-pulse"></i>'
+          )
+        )
+        await AwSleep.sleep(3000)
+        return this.$router.push({ name: 'Home' })
+      } else {
+        let error = ''
+        data.message.email
+          ? data.message.email.forEach(
+            msgid => (error += this.spanMessage('info', msgid))
+          )
+          : (error += this.spanMessage('info', data.message))
+        this.$('#view-login-msg').html(error)
+        this.$('#input-submit').prop('disabled', false)
+      }
+    },
+    spanMessage (color, message) {
+      return `<p class="text-bold text-${color}">${message}</p>`
+    },
+    inputInValid (goto) {
+      this.$(goto).addClass('is-invalid')
+      this.$(goto).addClass('text-danger')
+    },
+    inputValid (goto) {
+      this.$(goto).addClass('is-valid')
+      this.$(goto).addClass('text-success')
+    },
+    inputClear () {
+      this.$('.theInput').removeClass('is-valid')
+      this.$('.theInput').removeClass('is-invalid')
+      this.$('.theInput').removeClass('text-success')
+      this.$('.theInput').removeClass('text-danger')
     },
     passwordWatch (revert) {
       const inputtype = this.$('#input-password').attr('type')
-      this.$('#span-password').removeClass()
-      if (inputtype === 'password') {
-        revert ? this.$('#input-password').attr('type', 'text') : this.$('#input-password').attr('type', 'password')
-        revert ? this.$('#span-password').addClass('fas fa-eye-slash') : this.$('#span-password').addClass('fas fa-eye')
-      } else {
-        revert ? this.$('#input-password').attr('type', 'password') : this.$('#input-password').attr('type', 'text')
-        revert ? this.$('#span-password').addClass('fas fa-eye') : this.$('#span-password').addClass('fas fa-eye-slash')
+      if (this.passwordViewAble) {
+        this.$('#span-password').removeClass()
+        if (inputtype === 'password') {
+          revert
+            ? this.$('#input-password').attr('type', 'text')
+            : this.$('#input-password').attr('type', 'password')
+          revert
+            ? this.$('#span-password').addClass('fas fa-eye-slash')
+            : this.$('#span-password').addClass('fas fa-eye')
+        } else {
+          revert
+            ? this.$('#input-password').attr('type', 'password')
+            : this.$('#input-password').attr('type', 'text')
+          revert
+            ? this.$('#span-password').addClass('fas fa-eye')
+            : this.$('#span-password').addClass('fas fa-eye-slash')
+        }
       }
+    },
+    catchError (error) {
+      this.$('#view-login-msg').html(this.spanMessage('danger', 'Opps!, something went wrong'))
+      this.$('#input-submit').prop('disabled', false)
+      console.log(error)
     }
   },
   watch: {

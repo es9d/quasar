@@ -1,7 +1,18 @@
 import Vue from 'vue'
-import axios from 'axios'
 import JQuery from 'jquery'
 import VueMeta from 'vue-meta'
+
+// ? Auth
+import CredMng from 'src/third-party/auth/credential-manager.min'
+
+// ? Helpers
+import AppHelper from 'src/third-party/helper/app-helper.min'
+
+// ? Library
+import Toastr from 'src/third-party/library/toastrjs.min'
+
+// ? Services
+import RestServices from 'src/services/axios-api-endpoint'
 
 // ? Admin LTE
 import 'admin-lte/plugins/fontawesome-free/css/all.min.css'
@@ -13,7 +24,10 @@ import 'admin-lte/plugins/jquery/jquery.min.js'
 import 'admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js'
 import 'admin-lte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js'
 
-Vue.prototype.$axios = axios
+Vue.prototype.$axios = RestServices
 Vue.prototype.$ = JQuery
+Vue.prototype.$AppHelper = AppHelper
+Vue.prototype.$CredMng = CredMng
+Vue.prototype.$Toastr = Toastr
 
 Vue.use(VueMeta, { refreshOnceOnNavigation: true })
