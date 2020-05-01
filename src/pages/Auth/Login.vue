@@ -84,6 +84,11 @@ import ForgeJs from 'src/third-party/library/forgejs.min'
 import RegexValidation from 'src/third-party/helper/regex-validation.min'
 export default {
   name: 'Login',
+  created () {
+    if (this.$CredMng.credentialKeyTake()) {
+      this.autoLogin()
+    }
+  },
   methods: {
     async submitLogin () {
       this.inputClear()
@@ -125,6 +130,48 @@ export default {
             .postLogin(email, password)
             .then(response => this.loginResponse(response.data))
             .catch(error => this.catchError(error))
+        })
+        .catch(error => this.catchError(error))
+    },
+    async autoLogin () {
+      await AwSleep.sleep(1000)
+      this.$('#input-submit').prop('disabled', true)
+      this.$('#view-login-msg').html(
+        this.spanMessage(
+          'success',
+          'Auto Login... <i class="fas fa-spinner fa-pulse"></i>'
+        )
+      )
+      await AwSleep.sleep(2000)
+      await this.$axios
+        .getCookies()
+        .then(async () => {
+          await this.$axios
+            .getCredential()
+            .then(async response => {
+              this.$('#view-login-msg').html(
+                this.spanMessage(
+                  'success',
+                  'Welcome Back ' + response.data.response_data.name
+                )
+              )
+              await AwSleep.sleep(2000)
+              this.$('#view-login-msg').html(
+                this.spanMessage(
+                  'success',
+                  'Please waitt... <i class="fas fa-spinner fa-pulse"></i>'
+                )
+              )
+              await AwSleep.sleep(3000)
+              this.$Progress.finish()
+              return this.$router.push({ name: 'Home' })
+            })
+            .catch(
+              error => {
+                this.$CredMng.credentialKeyRemove()
+                this.catchError(error)
+              }
+            )
         })
         .catch(error => this.catchError(error))
     },
@@ -199,9 +246,9 @@ export default {
       }
     },
     catchError (error) {
-      this.$('#view-login-msg').html(this.spanMessage('danger', 'Opps!, something went wrong'))
+      this.$('#view-login-msg').html(this.spanMessage('danger', error.message))
       this.$('#input-submit').prop('disabled', false)
-      console.log(error)
+      // console.log(error.message)
     }
   },
   watch: {
