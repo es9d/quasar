@@ -13,9 +13,9 @@
 
 <script>
 export default {
-  name: "ContentHeader",
+  name: 'ContentHeader',
   props: {
     title: String
   }
-};
+}
 </script>

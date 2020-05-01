@@ -21,44 +21,44 @@
 
 <script>
 export default {
-  name: "Navbar",
+  name: 'Navbar',
   methods: {
-    sidebarFlag() {
-      let comm = this.$(".pushMenu").attr("data-comm");
-      if (comm == "deldflag") {
-        this.$(".pushMenu").attr("data-comm", "adddflag");
+    sidebarFlag () {
+      const comm = this.$('.pushMenu').attr('data-comm')
+      if (comm === 'deldflag') {
+        this.$('.pushMenu').attr('data-comm', 'adddflag')
         if (window.screen.width < 500) {
-          this.$(".sidebar-mini").removeClass("sidebar-collapse");
-          this.$(".sidebar-mini").addClass("sidebar-open");
+          this.$('.sidebar-mini').removeClass('sidebar-collapse')
+          this.$('.sidebar-mini').addClass('sidebar-open')
         } else {
-          this.$(".sidebar-mini").addClass("sidebar-collapse");
+          this.$('.sidebar-mini').addClass('sidebar-collapse')
         }
       } else {
-        this.$(".pushMenu").attr("data-comm", "deldflag");
+        this.$('.pushMenu').attr('data-comm', 'deldflag')
         if (window.screen.width < 500) {
-          this.$(".sidebar-mini").removeClass("sidebar-open");
-          this.$(".sidebar-mini").addClass("sidebar-collapse");
+          this.$('.sidebar-mini').removeClass('sidebar-open')
+          this.$('.sidebar-mini').addClass('sidebar-collapse')
         } else {
-          this.$(".sidebar-mini").removeClass("sidebar-collapse");
+          this.$('.sidebar-mini').removeClass('sidebar-collapse')
         }
       }
     },
-    sidebarFlagBlur() {
-      let comm = this.$(".pushMenu").attr("data-comm");
-      if (comm == "deldflag") {
+    sidebarFlagBlur () {
+      const comm = this.$('.pushMenu').attr('data-comm')
+      if (comm === 'deldflag') {
         if (window.screen.width < 500) {
-          this.$(".pushMenu").attr("data-comm", "adddflag");
-          this.$(".sidebar-mini").removeClass("sidebar-collapse");
-          this.$(".sidebar-mini").addClass("sidebar-open");
+          this.$('.pushMenu').attr('data-comm', 'adddflag')
+          this.$('.sidebar-mini').removeClass('sidebar-collapse')
+          this.$('.sidebar-mini').addClass('sidebar-open')
         }
       } else {
         if (window.screen.width < 500) {
-          this.$(".pushMenu").attr("data-comm", "deldflag");
-          this.$(".sidebar-mini").removeClass("sidebar-open");
-          this.$(".sidebar-mini").addClass("sidebar-collapse");
+          this.$('.pushMenu').attr('data-comm', 'deldflag')
+          this.$('.sidebar-mini').removeClass('sidebar-open')
+          this.$('.sidebar-mini').addClass('sidebar-collapse')
         }
       }
     }
   }
-};
+}
 </script>

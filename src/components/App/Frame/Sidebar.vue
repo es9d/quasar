@@ -1,6 +1,9 @@
 <template>
   <aside class="main-sidebar sidebar-dark-olive elevation-4">
-    <router-link :to="{ name: 'Home' }" class="brand-link">
+    <router-link
+      :to="{ name: 'Home' }"
+      class="brand-link"
+    >
       <img
         :src="`${this.$AppHelper.assetOrigin()}/dist/img/AdminLTELogo.png`"
         alt="AdminLTE Logo"
@@ -14,16 +17,20 @@
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
             <img
-              :src="`${this.$AppHelper.apiEndpoint()}${thisBiodata.profile_img}`"
+              :src="`${this.$AppHelper.apiEndpoint()}`"
               class="img-circle elevation-2"
               alt="Profile Image"
             />
           </div>
           <div class="info">
-            <router-link :to="{ name: 'Profile' }" class="d-block">{{thisBiodata.name}}</router-link>
+            <router-link
+              :to="{ name: 'Profile' }"
+              class="d-block"
+            ></router-link>
           </div>
         </div>
         <AllowLink />
+        {{ thisBiodata }}
       </div>
       <nav class="mt-2">
         <ul
@@ -39,15 +46,18 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import AllowLink from "./Child/AllowLink.vue";
+import { mapGetters } from 'vuex'
+import AllowLink from './Child/AllowLink.vue'
 export default {
-  name: "Sidebar",
+  name: 'Sidebar',
   components: {
     AllowLink
   },
   computed: {
-    ...mapGetters(["thisBiodata"])
+    ...mapGetters(['authStore/thisBiodata'])
+  },
+  created () {
+    console.log(this.$store.state.authStore.thisBiodata)
   }
-};
+}
 </script>

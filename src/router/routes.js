@@ -47,6 +47,12 @@ const routes = [
         meta: { title: 'Home Page' }
       }
     ]
+  },
+  {
+    name: 'About',
+    path: '/about',
+    // component: AboutPage,
+    meta: { title: 'About Us' }
   }
 ]
 
