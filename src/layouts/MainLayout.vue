@@ -6,7 +6,7 @@
           flat
           dense
           round
-          icon="menu"
+          icon="fas fa-bars"
           aria-label="Menu"
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
