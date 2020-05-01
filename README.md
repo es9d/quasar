@@ -1,6 +1,4 @@
-# com.bachtiars.quasar (quasar-project)
-
-Quasar Project
+# Quasar Project
 
 ## Install the dependencies
 ```bash
