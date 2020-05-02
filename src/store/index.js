@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import AuthStore from './authStore'
+import CredStore from './credStore'
 
 Vue.use(Vuex)
 
@@ -17,7 +18,7 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      AuthStore
+      AuthStore, CredStore
     },
 
     // enable strict mode (adds overhead!)

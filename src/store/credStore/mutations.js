@@ -1,4 +1,3 @@
-/*
-export function someMutation (state) {
+export default {
+  setUserCredStore: (state, data) => (state.userCredStore = data)
 }
-*/

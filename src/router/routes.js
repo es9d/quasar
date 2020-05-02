@@ -49,7 +49,7 @@ const routes = [
       {
         name: 'Profile',
         path: '/user/profile',
-        // component: () => import('pages/Page/Home.vue'),
+        component: () => import('pages/Page/User/Profile.vue'),
         meta: { title: 'Profile Page' }
       }
     ]

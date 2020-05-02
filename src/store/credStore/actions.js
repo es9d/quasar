@@ -1,4 +1,5 @@
-/*
-export function someAction (context) {
-}
-*/
+// export default {
+//   getUserCredStore(){
+//     this
+//   }
+// }
