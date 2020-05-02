@@ -13,25 +13,25 @@ const routes = [
       {
         name: 'ForgetPassword',
         path: '/lost-password',
-        // component: ForgetPasswordPage,
+        component: () => import('pages/Auth/ForgetPassword.vue'),
         meta: { title: 'Lost Password' }
       },
       {
         name: 'RecoverPassword',
         path: '/lost-password/recover/:access',
-        // component: RecoverPasswordPage,
+        component: () => import('pages/Auth/RecoverPassword.vue'),
         meta: { title: 'Recover Password' }
       },
       {
         name: 'Register',
         path: '/register',
-        // component: RegisterPage,
+        component: () => import('pages/Auth/Register.vue'),
         meta: { title: 'Register Page' }
       },
       {
         name: 'RegisterVerify',
         path: '/register/verify/:access',
-        // component: RegisterVerifyPage,
+        component: () => import('pages/Auth/RegisterVerify.vue'),
         meta: { title: 'Verifiying Email' }
       }
     ]

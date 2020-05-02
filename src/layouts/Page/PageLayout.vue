@@ -18,17 +18,13 @@
 
 <script>
 import { mapActions } from 'vuex'
-import Navbar from 'src/components/App/Frame/Navbar'
-import Sidebar from 'src/components/App/Frame/Sidebar'
-import ContentHeader from 'src/components/App/Frame/ContentHeader'
-import Footer from 'src/components/App/Frame/Footer'
 export default {
   name: 'PageLayout',
   components: {
-    Navbar,
-    Sidebar,
-    ContentHeader,
-    Footer
+    Navbar: () => import('src/components/App/Frame/Navbar'),
+    Sidebar: () => import('src/components/App/Frame/Sidebar'),
+    ContentHeader: () => import('src/components/App/Frame/ContentHeader'),
+    Footer: () => import('src/components/App/Frame/Footer')
   },
   async created () {
     this.isAuthenticated()
