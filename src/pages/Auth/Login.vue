@@ -127,7 +127,7 @@ export default {
         .getCookies()
         .then(() => {
           this.$axios
-            .postLogin(email, password)
+            .postLogin(email, password, this.$Device('login', true))
             .then(response => this.loginResponse(response.data))
             .catch(error => this.catchError(error))
         })

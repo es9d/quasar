@@ -9,6 +9,7 @@ import CredMng from 'src/third-party/auth/credential-manager.min'
 import AppHelper from 'src/third-party/helper/app-helper.min'
 
 // ? Library
+import DeviceDetect from 'src/third-party/library/devicedetectjs.min'
 import Toastr from 'src/third-party/library/toastrjs.min'
 
 // ? Services
@@ -28,6 +29,7 @@ Vue.prototype.$axios = RestServices
 Vue.prototype.$ = JQuery
 Vue.prototype.$AppHelper = AppHelper
 Vue.prototype.$CredMng = CredMng
+Vue.prototype.$Device = DeviceDetect
 Vue.prototype.$Toastr = Toastr
 
 Vue.use(VueMeta, { refreshOnceOnNavigation: true })
