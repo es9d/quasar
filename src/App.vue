@@ -10,7 +10,7 @@ export default {
   metaInfo () {
     return {
       title: this.$route.meta.title,
-      titleTemplate: '%s :: ' + this.$AppHelper.appName(),
+      titleTemplate: `%s :: ${this.$AppHelper.appName()}`,
       htmlAttrs: {
         lang: 'en',
         amp: true

@@ -1,6 +1,7 @@
 import axios from 'axios'
-import AppHelper from 'src/third-party/helper/app-helper.min.js'
-import CredMng from 'src/third-party/auth/credential-manager.min.js'
+import AppHelper from 'src/third-party/helper/app-helper.min'
+import CredMng from 'src/third-party/auth/credential-manager.min'
+import LocSer from 'src/third-party/library/locutus-serialize.min'
 
 axios.defaults.withCredentials = true
 axios.defaults.baseURL = AppHelper.apiEndpoint()
@@ -10,7 +11,7 @@ const RestServices = {
   getCookies: () => axios.get('/sanctum/csrf-cookie'),
   getCredential: () => axios.get('/api/auth/creds', CredMng.axiosHeaderToken()),
   getUserProfile: () => axios.get('/api/user/profile', CredMng.axiosHeaderToken()),
-  postLogin: (email, password, devData) => axios.post('/api/auth/login', { email, password, device: devData.device }),
+  postLogin: (email, password, devData) => axios.post('/api/auth/login', { email, password, device: devData.device, uadata: LocSer.serialize(devData.data) }),
   postLogout: () => axios.post('/api/auth/logout', {}, CredMng.axiosHeaderToken()),
   postRegister: (name, email, password) => axios.post('/api/auth/register', { name, email, password }),
   postVerifyRegister: (_access) => axios.post('/api/access/register/verify', { _access }),
