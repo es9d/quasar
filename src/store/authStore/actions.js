@@ -9,7 +9,7 @@ export default {
         .catch(() => {
           Toastr.toastError('Please login first!')
           CredMng.credentialKeyRemove()
-          this.$router.push({ path: '/login' })
+          this.$router.push({ name: 'Login' })
         })
       if (response.data.status === 'success') {
         commit('setBiodata', response.data.response_data)
