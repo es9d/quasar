@@ -56,6 +56,7 @@
               id="history"
             >
               <p class="text-bold text-center">--- Login History ---</p>
+              <HistoryLogins />
             </div>
             <div
               class="tab-pane"
@@ -219,6 +220,9 @@ import PassGenJs from 'src/third-party/library/passgenjs.min'
 import Toastr from 'src/third-party/library/toastrjs.min'
 export default {
   name: 'Profile',
+  components: {
+    HistoryLogins: () => import('src/components/App/Media/HistoryLogins')
+  },
   computed: {
     ...mapGetters('AuthStore', ['thisBiodata'])
   },

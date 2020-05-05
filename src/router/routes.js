@@ -8,7 +8,7 @@ const routes = [
         name: 'Login',
         path: '/',
         component: () => import('pages/Auth/Login.vue'),
-        meta: { title: 'Login Page' }
+        meta: { title: 'Login' }
       },
       {
         name: 'ForgetPassword',
@@ -26,7 +26,7 @@ const routes = [
         name: 'Register',
         path: '/register',
         component: () => import('pages/Auth/Register.vue'),
-        meta: { title: 'Register Page' }
+        meta: { title: 'Register' }
       },
       {
         name: 'RegisterVerify',
@@ -44,13 +44,19 @@ const routes = [
         name: 'Home',
         path: '/',
         component: () => import('pages/Page/Home.vue'),
-        meta: { title: 'Home Page' }
+        meta: { title: 'Home' }
       },
       {
         name: 'Profile',
         path: '/user/profile',
         component: () => import('pages/Page/User/Profile.vue'),
-        meta: { title: 'Profile Page' }
+        meta: { title: 'Profile' }
+      },
+      {
+        name: 'HistoryLogin',
+        path: '/user/history/login/:log_code',
+        component: () => import('pages/Page/User/HistoryLogin.vue'),
+        meta: { title: 'Login History' }
       }
     ]
   },

@@ -1,5 +1,5 @@
 <template>
-  <div class="home-page sidebar-mini layout-fixed layout-footer-fixed layout-navbar-fixed">
+  <div class="home-page sidebar-mini layout-fixed layout-navbar-fixed">
     <div class="wrapper">
       <Navbar />
       <Sidebar />
