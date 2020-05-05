@@ -11,6 +11,7 @@ const RestServices = {
   getCookies: () => axios.get('/sanctum/csrf-cookie'),
   getCredential: () => axios.get('/api/auth/creds', CredMng.axiosHeaderToken()),
   getUserProfile: () => axios.get('/api/user/profile', CredMng.axiosHeaderToken()),
+  getUserLoginHistory: (_loghistory) => axios.get('/api/user/history/login', { _loghistory }, CredMng.axiosHeaderToken()),
   postLogin: (email, password, devData) => axios.post('/api/auth/login', { email, password, device: devData.device, uadata: LocSer.serialize(devData.data) }),
   postLogout: () => axios.post('/api/auth/logout', {}, CredMng.axiosHeaderToken()),
   postRegister: (name, email, password) => axios.post('/api/auth/register', { name, email, password }),
