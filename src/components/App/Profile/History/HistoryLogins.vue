@@ -14,18 +14,18 @@
               v-for="(logs,idx) in userLoginHistory"
               :key="idx"
             >
-              <td class="w-75">
+              <td class="w-auto w-lg-75">
                 <div class="row text-secondary text-sm">
                   <div class="col-12"><i class="far fa-calendar-alt"></i>&ensp;{{logs.date_time}}</div>
-                  <div class="col-12"><i :class="`fas fa-${logs.device_type == 'mobile' ? 'mobile-alt' : (logs.device_type == 'tablet' ? 'tablet-alt' : 'desktop')}`"></i>&ensp;{{logs.device_name}}</div>
+                  <div class="col-12"><i :class="`fas fa-${(logs.device_type == 'mobile' || logs.device_type == 'tablet') ? `${logs.device_type}-alt` : 'desktop'}`"></i>&ensp;{{logs.device_name}}</div>
                   <div class="col-12"><i class="fas fa-network-wired"></i>&ensp;{{logs.ip_address}}</div>
                 </div>
               </td>
-              <td class="w-25">
+              <td class="w-auto w-lg-25">
                 <router-link
                   :to="{name:'HistoryLogin', params:{log_code:logs.log_code}}"
-                  class="btn btn-light btn-sm btn-block text-bold"
-                ><i class="fas fa-info-circle"></i>&ensp;detail</router-link>
+                  class="fas fa-info-circle fa-lg text-secondary"
+                />
               </td>
             </tr>
           </tbody>
