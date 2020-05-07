@@ -129,79 +129,7 @@
               class="tab-pane"
               id="password"
             >
-              <p class="text-bold text-center">--- Password Management ---</p>
-              <div class="form-group">
-                <div class="input-group">
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="setting-password-current"
-                    placeholder="Current Password"
-                    @keyup.enter="gotoNewPassword"
-                    v-model="profileOldPassword"
-                  />
-                  <div class="input-group-append">
-                    <div
-                      class="input-group-text"
-                      v-on:click="passwordWatch('#oldpassword', '#setting-password-current')"
-                    >
-                      <span
-                        class="fas fa-eye"
-                        id="oldpassword"
-                      ></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="input-group mt-3">
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="setting-password-new"
-                    placeholder="New Password"
-                    @keyup="formFieldPassword"
-                    v-model="profileNewPassword"
-                  />
-                  <div class="input-group-append">
-                    <div
-                      class="input-group-text"
-                      v-on:click="passwordWatch('#newpassword', '#setting-password-new')"
-                    >
-                      <span
-                        class="fas fa-eye"
-                        id="newpassword"
-                      ></span>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="messagePassword mt-1"
-                  :v-if="profileUpdatePasswordMsg.length"
-                >
-                  <h6
-                    v-for="(msg, idx) in profileUpdatePasswordMsg"
-                    :key="idx"
-                  >{{msg}}</h6>
-                </div>
-                <p
-                  class="text-muted font-italic"
-                  id="password-generate-button"
-                  style="font-size: 15px; display: none"
-                >
-                  Confuse?, just
-                  <a
-                    href="javascript:void(0)"
-                    @click="generatePassword"
-                  >
-                    <u>generate password</u>
-                  </a>
-                </p>
-              </div>
-              <button
-                class="btn btn-primary float-right text-bold"
-                @click="profileUpdatePassword"
-              >
-                <i class="fas fa-key"></i>&ensp;Update Password
-              </button>
+              <ManagementPassword />
             </div>
           </div>
         </div>
@@ -213,15 +141,12 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import Swal from 'sweetalert2'
-import AwSleep from 'src/third-party/helper/await-sleep.min'
-import RegexValidation from 'src/third-party/helper/regex-validation.min'
-import ForgeJs from 'src/third-party/library/forgejs.min.js'
-import PassGenJs from 'src/third-party/library/passgenjs.min'
 import Toastr from 'src/third-party/library/toastrjs.min'
 export default {
   name: 'Profile',
   components: {
-    HistoryLogins: () => import('src/components/App/Profile/History/HistoryLogins')
+    HistoryLogins: () => import('src/components/App/Profile/History/HistoryLogins'),
+    ManagementPassword: () => import('src/components/App/Profile/Management/ManagementPassword')
   },
   computed: {
     ...mapGetters('AuthStore', ['thisBiodata'])
@@ -300,60 +225,6 @@ export default {
         }
       })
     },
-    profileUpdatePassword () {
-      Swal.fire({
-        title: 'Update your password?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        cancelButtonText: 'Cancel!',
-        confirmButtonText: 'Yes, Update Now!'
-      }).then(async res => {
-        if (res.value) {
-          if (this.profileOldPassword.length > 0) {
-            if (this.profileUpdatePasswordBool) {
-              await this.$axios.getCookies().then(async () => {
-                await this.$axios
-                  .patchUserPassword(
-                    this.appTimeNow,
-                    ForgeJs.encryptPassword(this.profileOldPassword),
-                    ForgeJs.encryptPassword(this.profileNewPassword)
-                  )
-                  .then(async res => {
-                    if (res.data.status === 'success') {
-                      await Swal.fire(
-                        'Success',
-                        `${res.data.message}`,
-                        'success'
-                      )
-                    } else {
-                      await Swal.fire(
-                        'Opps!!',
-                        `${this.responseFailed(res.data.message)}`,
-                        'error'
-                      )
-                    }
-                  })
-                  .catch(err => this.catchError('swal', err))
-              })
-            } else {
-              Swal.fire(
-                'Waitt!',
-                'Your new password format are not correct yet.',
-                'warning'
-              )
-            }
-          } else {
-            Swal.fire(
-              'Waitt!',
-              'Your must enter your current password.',
-              'warning'
-            )
-          }
-        }
-      })
-    },
     responseFailed (data) {
       var errorMsg = ''
       if (data.name) {
@@ -374,44 +245,12 @@ export default {
       if (errorMsg) return errorMsg
       else return data
     },
-    async formFieldPassword () {
-      await AwSleep.sleep(1000)
-      const validate = RegexValidation.passRegex(this.profileNewPassword)
-      this.$('#password-generate-button').show()
-      this.passwordWatch()
-      this.$('.messagePassword').css(
-        'color',
-        `${validate.status === 'success' ? '#119822' : '#C91E1E'}`
-      )
-      this.profileUpdatePasswordBool = validate.result
-      this.profileUpdatePasswordMsg = validate.message
-    },
-    passwordWatch (toggle, inputform) {
-      const inputtype = this.$(`${inputform}`).attr('type')
-      this.$(`${toggle}`).removeClass()
-      if (inputtype === 'password') {
-        this.$(`${inputform}`).attr('type', 'text')
-        this.$(`${toggle}`).addClass('fas fa-eye-slash')
-      } else {
-        this.$(`${inputform}`).attr('type', 'password')
-        this.$(`${toggle}`).addClass('fas fa-eye')
-      }
-    },
-    generatePassword () {
-      this.profileNewPassword = PassGenJs.newGenPass()
-      this.$('#newpassword').removeClass()
-      this.$('#setting-password-new').attr('type', 'text')
-      this.$('#newpassword').addClass('fas fa-eye-slash')
-    },
     setFieldMessage (goto, status, message) {
       this.$(`${goto}`).css(
         'color',
         `${status === 'success' ? '#119822' : '#C91E1E'}`
       )
       this.$(`${goto}`).html(message)
-    },
-    gotoNewPassword () {
-      this.$('#setting-password-new').focus()
     },
     catchError (alertType, err) {
       alertType === 'swal'
@@ -420,22 +259,13 @@ export default {
       console.log(err)
     }
   },
-  watch: {
-    profileNewPassword () {
-      this.formFieldPassword()
-    }
-  },
   data () {
     return {
       appTimeNow: new Date().getTime(),
       fullNameBiodata: this.$store.state.AuthStore.thisBiodata.name,
       imageUploadOrigin: '',
       imageUploadForm: '',
-      imageUploadResult: '',
-      profileOldPassword: '',
-      profileNewPassword: '',
-      profileUpdatePasswordBool: false,
-      profileUpdatePasswordMsg: []
+      imageUploadResult: ''
     }
   }
 }
