@@ -26,15 +26,7 @@
             </div>
           </div>
         </div>
-        <div
-          class="messagePassword mt-1"
-          :v-if="msgPassword.length"
-        >
-          <h6
-            v-for="(msg, idx) in msgPassword"
-            :key="idx"
-          >{{msg}}</h6>
-        </div>
+        <p class="messagePassword mt-1"></p>
         <p
           class="text-muted font-italic"
           id="password-generate-button"
@@ -75,11 +67,9 @@
 
 <script>
 import Swal from 'sweetalert2'
-import AwSleep from 'src/third-party/helper/await-sleep.min.js'
 import RegexValidation from 'src/third-party/helper/regex-validation.min'
 import ForgeJs from 'src/third-party/library/forgejs.min.js'
 import PassGenJs from 'src/third-party/library/passgenjs.min'
-import Toastr from 'src/third-party/library/toastrjs.min.js'
 export default {
   name: 'RecoverPassword',
   created () {
@@ -92,12 +82,12 @@ export default {
           .postLostPasswordAccess(this.tokenAccess)
           .then(res => {
             if (res.data.status === 'error') {
-              Toastr.toastError(res.data.message)
+              this.$Notify.notifyError(res.data.message)
               return this.$router.push({ name: 'Login' })
             }
           })
           .catch(err => {
-            Toastr.toastError(err.message)
+            this.$Notify.notifyError(err.message)
             return this.$router.push({ name: 'Login' })
           })
       })
@@ -150,16 +140,14 @@ export default {
       })
     },
     async formFieldPassword () {
-      await AwSleep.sleep(1000)
-      const validate = RegexValidation.passRegex(this.thisPassword)
-      this.$('#password-generate-button').show()
       this.passwordWatch()
-      this.$('.messagePassword').css(
-        'color',
-        `${validate.status === 'success' ? '#119822' : '#C91E1E'}`
-      )
-      this.boolPassword = validate.result
-      this.msgPassword = validate.message
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(() => {
+        const validate = RegexValidation.passRegex(this.thisPassword)
+        this.$('#password-generate-button').show()
+        this.setFieldMessage('.messagePassword', validate.status, validate.message)
+        this.boolPassword = validate.result
+      }, 1000)
       if (this.thisPassword.length === 0) {
         this.$('#thepassword').removeClass()
         this.$('#thepassword').addClass('fas fa-lock')
@@ -215,7 +203,7 @@ export default {
       tokenAccess: this.$route.params.access,
       thisPassword: '',
       boolPassword: false,
-      msgPassword: []
+      timeout: null
     }
   }
 }

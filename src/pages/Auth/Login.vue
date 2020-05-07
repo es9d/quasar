@@ -107,7 +107,7 @@ export default {
             ForgeJs.encryptPassword(this.thisPassword)
           )
         } else {
-          this.$Toastr.toastInfo(mail.message)
+          this.$Notify.notifyInfo(mail.message)
         }
       }
       if (!this.thisEmail) {

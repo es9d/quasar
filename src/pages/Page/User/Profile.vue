@@ -221,7 +221,7 @@ import Toastr from 'src/third-party/library/toastrjs.min'
 export default {
   name: 'Profile',
   components: {
-    HistoryLogins: () => import('src/components/App/Media/HistoryLogins')
+    HistoryLogins: () => import('src/components/App/Profile/History/HistoryLogins')
   },
   computed: {
     ...mapGetters('AuthStore', ['thisBiodata'])

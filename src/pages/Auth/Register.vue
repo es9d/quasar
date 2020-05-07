@@ -63,15 +63,7 @@
             </div>
           </div>
         </div>
-        <div
-          class="messagePassword mt-1"
-          :v-if="msgPassword.length"
-        >
-          <h6
-            v-for="(msg, idx) in msgPassword"
-            :key="idx"
-          >{{msg}}</h6>
-        </div>
+        <p class="messagePassword mt-1"></p>
         <p
           class="text-muted font-italic"
           id="password-generate-button"
@@ -114,7 +106,6 @@
 import Swal from 'sweetalert2'
 import ForgeJS from 'src/third-party/library/forgejs.min'
 import PassGenJs from 'src/third-party/library/passgenjs.min'
-import AwSleep from 'src/third-party/helper/await-sleep.min'
 import RegexValidation from 'src/third-party/helper/regex-validation.min'
 export default {
   name: 'Register',
@@ -215,28 +206,30 @@ export default {
       this.$(`${goto}`).html('')
     },
     async formFieldName () {
-      await AwSleep.sleep(1000)
-      const validate = RegexValidation.nameRegex(this.thisName)
-      this.boolName = validate.result
-      this.setFieldMessage('.messageName', validate.status, validate.message)
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(() => {
+        const validate = RegexValidation.nameRegex(this.thisName)
+        this.boolName = validate.result
+        this.setFieldMessage('.messageName', validate.status, validate.message)
+      }, 1000)
     },
     async formFieldEmail () {
-      await AwSleep.sleep(1000)
-      const validate = RegexValidation.mailRegex(this.thisEmail)
-      this.boolEmail = validate.result
-      this.setFieldMessage('.messageEmail', validate.status, validate.message)
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(() => {
+        const validate = RegexValidation.mailRegex(this.thisEmail)
+        this.boolEmail = validate.result
+        this.setFieldMessage('.messageEmail', validate.status, validate.message)
+      }, 1000)
     },
     async formFieldPassword () {
-      await AwSleep.sleep(1000)
-      const validate = RegexValidation.passRegex(this.thisPassword)
-      this.$('#password-generate-button').show()
       this.passwordWatch()
-      this.$('.messagePassword').css(
-        'color',
-        `${validate.status === 'success' ? '#119822' : '#C91E1E'}`
-      )
-      this.boolPassword = validate.result
-      this.msgPassword = validate.message
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(() => {
+        const validate = RegexValidation.passRegex(this.thisPassword)
+        this.$('#password-generate-button').show()
+        this.setFieldMessage('.messagePassword', validate.status, validate.message)
+        this.boolPassword = validate.result
+      }, 1000)
       if (this.thisPassword.length === 0) {
         this.$('#thepassword').removeClass()
         this.$('#thepassword').addClass('fas fa-lock')
@@ -286,7 +279,7 @@ export default {
       boolEmail: false,
       boolPassword: false,
       seePassword: false,
-      msgPassword: []
+      timeout: null
     }
   }
 }
