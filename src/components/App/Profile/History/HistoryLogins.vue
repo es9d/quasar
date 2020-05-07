@@ -1,5 +1,6 @@
 <template>
-  <div id="login-histories">
+  <div id="login-history">
+    <p class="text-bold text-center">--- Login History ---</p>
     <div v-if="userLoginHistory">
       <button
         class="btn float-right btn-text btn-sm text-sm text-primary"

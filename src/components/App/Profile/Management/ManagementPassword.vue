@@ -201,6 +201,7 @@ export default {
   },
   data () {
     return {
+      appTimeNow: new Date().getTime(),
       profileOldPassword: '',
       profileNewPassword: '',
       profileUpdatePasswordBool: false,
