@@ -4,21 +4,62 @@
     id="login-history-detail"
   >
     <div v-if="logDetailData">
-      <dl class="text-sm">
-        <dt><i class="far fa-calendar-alt"></i>&ensp;Date Time</dt>
-        <dd>{{logDetailData.date_time}}</dd>
-        <div v-if="logDetailData.device_info.devType == 'mobile'">
-          <dt>Login At :</dt>
-          <dd><i :class="`fab fa-${iconConvert(logDetailData.device_info.osName)} fa-lg`"></i>&emsp;{{logDetailData.device_info.osName}} - {{logDetailData.device_info.osVersion}}</dd>
-          <dd><i :class="`fas fa-${logDetailData.device_info.devType}-alt fa-lg`"></i>&emsp;{{logDetailData.device_info.mobileVendor}} - {{logDetailData.device_info.mobileModel}}</dd>
-          <dd><i class="fas fa-network-wired fa-lg"></i>&ensp;{{logDetailData.ip_address}}</dd>
-          <dt>User Agent :</dt>
-          <dd><i class="fas fa-cogs fa-lg"></i>&emsp;{{logDetailData.device_info.getUA}}</dd>
-        </div>
-
-        <!-- <div v-else-if="logDetailData.device_info.devType == 'tablet'">wdw</div>
-      <div v-else>dwad</div> -->
-      </dl>
+      <table class="table table-borderless table-sm">
+        <tbody>
+          <tr>
+            <td
+              class="text-bold"
+              colspan="2"
+            >Date Time</td>
+          </tr>
+          <tr>
+            <td class="text-center"><i class="far fa-calendar-alt fa-lg"></i></td>
+            <td>{{logDetailData.date_time}}</td>
+          </tr>
+          <tr>
+            <td
+              class="text-bold"
+              colspan="2"
+            >Login At</td>
+          </tr>
+        </tbody>
+        <tbody v-if="(logDetailData.device_info.devType == 'mobile') || (logDetailData.device_info.devType == 'tablet')">
+          <tr>
+            <td class="text-center"><i :class="`fab fa-${iconConvert(logDetailData.device_info.osName)} fa-lg`"></i></td>
+            <td>{{logDetailData.device_info.osName}} - {{logDetailData.device_info.osVersion}}</td>
+          </tr>
+          <tr>
+            <td class="text-center"><i :class="`fas fa-${logDetailData.device_info.devType}-alt fa-lg`"></i></td>
+            <td>{{logDetailData.device_info.mobileVendor}} - {{logDetailData.device_info.mobileModel}}</td>
+          </tr>
+        </tbody>
+        <tbody v-else>
+          <tr>
+            <td class="text-center"><i :class="`fab fa-${iconConvert(logDetailData.device_info.osName)} fa-lg`"></i></td>
+            <td>{{logDetailData.device_info.osName}} - {{logDetailData.device_info.osVersion}}</td>
+          </tr>
+          <tr>
+            <td class="text-center"><i :class="`fab fa-${iconConvert(logDetailData.device_info.browserName)} fa-lg`"></i></td>
+            <td>{{logDetailData.device_info.browserName}} - {{logDetailData.device_info.browserVersion}}</td>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr>
+            <td class="text-center"><i class="fas fa-network-wired fa-lg"></i></td>
+            <td>{{logDetailData.ip_address}}</td>
+          </tr>
+          <tr>
+            <td
+              class="text-bold"
+              colspan="2"
+            >User Agent</td>
+          </tr>
+          <tr>
+            <td class="text-center"><i class="fas fa-cogs fa-lg"></i></td>
+            <td>{{logDetailData.device_info.getUA}}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
@@ -42,6 +83,7 @@ export default {
     },
     iconConvert (osName) {
       if (osName === 'iOS') return 'apple'
+      else if (osName === 'Chromium') return 'chrome'
       else return osName.toLowerCase()
     },
     catchError (err) {

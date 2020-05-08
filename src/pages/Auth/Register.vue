@@ -136,7 +136,6 @@ export default {
       })
     },
     async postNewMember () {
-      this.$Progress.start()
       this.$axios
         .getCookies()
         .then(() => {
@@ -161,15 +160,11 @@ export default {
       this.$('#input-submit').click()
     },
     catchError (error) {
-      this.$Progress.fail()
       this.$('#view-login-msg').html(this.spanMessage('danger', 'Opps!, something went wrong'))
       this.$('#input-submit').prop('disabled', false)
       console.log(error)
     },
     async responseRegister (data) {
-      data.status === 'success'
-        ? this.$Progress.finish()
-        : this.$Progress.fail()
       if (data.status === 'success') {
         await Swal.fire('Success', `${data.message}`, 'success')
         return this.$router.push({ name: 'Login' })
