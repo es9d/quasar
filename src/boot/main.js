@@ -8,6 +8,7 @@ import CredMng from 'src/third-party/auth/credential-manager.min'
 // ? Helpers
 import AppHelper from 'src/third-party/helper/app-helper.min'
 import AppNotify from 'src/third-party/helper/app-notify.min'
+import AxiosResponse from 'src/third-party/helper/axios-response.min'
 
 // ? Library
 import DeviceDetect from 'src/third-party/library/devicedetectjs.min'
@@ -27,6 +28,7 @@ import 'admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js'
 import 'admin-lte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js'
 
 Vue.prototype.$axios = RestServices
+Vue.prototype.$axiosRes = AxiosResponse
 Vue.prototype.$ = JQuery
 Vue.prototype.$AppHelper = AppHelper
 Vue.prototype.$CredMng = CredMng

@@ -173,8 +173,8 @@ export default {
     },
     catchError (alertType, err) {
       alertType === 'swal'
-        ? Swal.fire('Sorry', 'Opps!, something went wrong', 'error')
-        : this.$Notify.notifyError('Opps!, something went wrong')
+        ? Swal.fire('Sorry', this.$axiosRes.catchError(err), 'error')
+        : this.$Notify.notifyError(this.$axiosRes.catchError(err))
       console.log(err)
     }
   },

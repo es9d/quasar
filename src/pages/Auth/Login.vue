@@ -245,9 +245,9 @@ export default {
       }
     },
     catchError (error) {
-      this.$('#view-login-msg').html(this.spanMessage('danger', error.message))
+      this.$('#view-login-msg').html(this.spanMessage('danger', this.$axiosRes.catchError(error)))
       this.$('#input-submit').prop('disabled', false)
-      // console.log(error.message)
+      console.log(error.message)
     }
   },
   watch: {

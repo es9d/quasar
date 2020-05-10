@@ -71,14 +71,14 @@ export default {
             .then(async res => {
               if (res.data.status === 'success') {
                 await this.$CredMng.credentialKeyRemove()
-                this.$Toastr.toastSuccess(res.data.message)
+                this.$Notify.notifySuccess(res.data.message)
                 return this.$router.push({ name: 'Login' })
               } else {
-                this.$Toastr.toastError(res.data.message)
+                this.$Notify.notifyError(res.data.message)
               }
             })
             .catch(error => {
-              this.$Toastr.toastError(error.message)
+              this.$Notify.notifyError(error.message)
             })
         }
       })

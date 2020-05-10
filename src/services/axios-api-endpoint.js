@@ -1,28 +1,32 @@
 import axios from 'axios'
 import AppHelper from 'src/third-party/helper/app-helper.min'
+import AxiosResponse from 'src/third-party/helper/axios-response.min'
 import CredMng from 'src/third-party/auth/credential-manager.min'
 import LocSer from 'src/third-party/library/locutus-serialize.min'
+import Notify from 'src/third-party/helper/app-notify.min'
 
 axios.defaults.withCredentials = true
 axios.defaults.baseURL = AppHelper.apiEndpoint()
 axios.defaults.headers = { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
 
 const RestServices = {
-  getCookies: () => axios.get('/sanctum/csrf-cookie'),
-  getCredential: () => axios.get('/api/auth/creds', CredMng.axiosHeaderToken()),
-  getUserProfile: () => axios.get('/api/user/profile', CredMng.axiosHeaderToken()),
-  getUserLoginHistory: (_loghistory) => axios.get(`/api/user/history/login?_loghistory=${_loghistory}`, CredMng.axiosHeaderToken()),
-  getUserLoginHistoryByCode: (_logdetailuser) => axios.get(`/api/user/history/login?_logdetailuser=${_logdetailuser}`, CredMng.axiosHeaderToken()),
-  postLogin: (email, password, devData) => axios.post('/api/auth/login', { email, password, device: devData.device, uadata: LocSer.serialize(devData.data) }),
-  postLogout: () => axios.post('/api/auth/logout', {}, CredMng.axiosHeaderToken()),
-  postRegister: (name, email, password) => axios.post('/api/auth/register', { name, email, password }),
-  postVerifyRegister: (_access) => axios.post('/api/access/register/verify', { _access }),
-  postLostPassword: (email) => axios.post('/api/auth/lost-password', { email }),
-  postLostPasswordAccess: (_access) => axios.post('/api/auth/lost-password/access', { _access }),
-  postRecoverPassword: (password, _access) => axios.post('/api/auth/lost-password/recover', { password, _access }),
-  postNewImageUserProfile: (formImage) => axios.post('/api/user/profile?_upload=image', formImage, CredMng.axiosHeaderToken()),
-  patchUserBiodata: (time, name, image) => axios.patch(`/api/user/profile/${time}?_update=biodata`, { name, image }, CredMng.axiosHeaderToken()),
-  patchUserPassword: (time, oldpass, newpass) => axios.patch(`/api/user/profile/${time}?_update=password`, { old_pass: oldpass, new_pass: newpass }, CredMng.axiosHeaderToken())
+  getCookies: () => axios.get('/sanctum/csrf-cookie').catch(err => axiosResErrorNotify(err, 'error')),
+  getCredential: () => axios.get('/api/auth/creds', CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, '')),
+  getUserProfile: () => axios.get('/api/user/profile', CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, '')),
+  getUserLoginHistory: (_loghistory) => axios.get(`/api/user/history/login?_loghistory=${_loghistory}`, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, '')),
+  getUserLoginHistoryByCode: (_logdetailuser) => axios.get(`/api/user/history/login?_logdetailuser=${_logdetailuser}`, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, '')),
+  postLogin: (email, password, devData) => axios.post('/api/auth/login', { email, password, device: devData.device, devdata: LocSer.serialize(devData.data) }).catch(err => axiosResErrorNotify(err, 'info')),
+  postLogout: () => axios.post('/api/auth/logout', {}, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, '')),
+  postRegister: (name, email, password) => axios.post('/api/auth/register', { name, email, password }).catch(err => axiosResErrorNotify(err, 'info')),
+  postVerifyRegister: (_access) => axios.post('/api/access/register/verify', { _access }).catch(err => axiosResErrorNotify(err, 'info')),
+  postLostPassword: (email) => axios.post('/api/auth/lost-password', { email }).catch(err => axiosResErrorNotify(err, 'info')),
+  postLostPasswordAccess: (_access) => axios.post('/api/auth/lost-password/access', { _access }).catch(err => axiosResErrorNotify(err, 'info')),
+  postRecoverPassword: (password, _access) => axios.post('/api/auth/lost-password/recover', { password, _access }).catch(err => axiosResErrorNotify(err, 'info')),
+  postNewImageUserProfile: (formImage) => axios.post('/api/user/profile?_upload=image', formImage, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, 'info')),
+  patchUserBiodata: (time, name, image) => axios.patch(`/api/user/profile/${time}?_update=biodata`, { name, image }, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, 'info')),
+  patchUserPassword: (time, oldpass, newpass) => axios.patch(`/api/user/profile/${time}?_update=password`, { old_pass: oldpass, new_pass: newpass }, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, 'info'))
 }
+
+const axiosResErrorNotify = (err, type) => Notify.notifyResponse(type, AxiosResponse.catchError(err))
 
 export default RestServices
