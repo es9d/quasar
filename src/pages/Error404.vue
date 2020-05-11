@@ -12,8 +12,8 @@
     <router-link
       class="btn btn-secondary"
       style="width:200px;"
-      :to="{name: 'Login'}"
-    >Go Back</router-link>
+      :to="{name: 'Home'}"
+    >Return to Home</router-link>
   </div>
 </template>
 

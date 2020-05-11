@@ -11,8 +11,8 @@ axios.defaults.headers = { Accept: 'application/json', 'X-Requested-With': 'XMLH
 
 const RestServices = {
   getCookies: () => axios.get('/sanctum/csrf-cookie').catch(err => axiosResErrorNotify(err, 'error')),
-  getCredential: () => axios.get('/api/auth/creds', CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, '')),
-  getUserProfile: () => axios.get('/api/user/profile', CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, '')),
+  getCredential: () => axios.get('/api/auth/creds', CredMng.axiosHeaderToken()),
+  getUserProfile: () => axios.get('/api/user/profile', CredMng.axiosHeaderToken()),
   getUserLoginHistory: (_loghistory) => axios.get(`/api/user/history/login?_loghistory=${_loghistory}`, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, '')),
   getUserLoginHistoryByCode: (_logdetailuser) => axios.get(`/api/user/history/login?_logdetailuser=${_logdetailuser}`, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, '')),
   postLogin: (email, password, devData) => axios.post('/api/auth/login', { email, password, device: devData.device, devdata: LocSer.serialize(devData.data) }).catch(err => axiosResErrorNotify(err, 'info')),

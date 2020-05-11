@@ -1,9 +1,9 @@
-import router from '@/router'
-import CredMng from '@/third-party/auth/credential-manager.min.js'
-import Toastr from "@/third-party/library/toastrjs.min.js";
-import RestServices from '@/services/axios/rest-api';
+import router from 'src/router'
+import CredMng from 'src/third-party/auth/credential-manager.min'
+import Toastr from 'src/third-party/library/toastrjs.min'
+import RestServices from 'src/services/axios-api-endpoint'
 const AuthMid = {
-    async boolCheck() {
+    async boolCheck () {
         let res = await RestServices.getCredential().catch(() => this.doLogout());
         return this.boolCheckRes(res);
     },

@@ -78,7 +78,7 @@
           </a>
         </p>
         <div class="row mt-3 mb-3">
-          <div class="col offset-6 offset-md-7 col-6 col-md-5">
+          <div class="offset-0 offset-sm-7 col-12 col-sm-5">
             <button
               type="submit"
               class="btn btn-primary btn-block text-bold"
