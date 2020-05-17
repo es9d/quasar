@@ -70,9 +70,7 @@ export default {
             .postLogout()
             .then(async res => {
               if (res.data.status === 'success') {
-                await this.$CredMng.credentialKeyRemove()
                 this.$Notify.notifySuccess(res.data.message)
-                return this.$router.push({ name: 'Login' })
               } else {
                 this.$Notify.notifyError(res.data.message)
               }
@@ -80,6 +78,8 @@ export default {
             .catch(error => {
               this.$Notify.notifyError(error.message)
             })
+          await this.$CredMng.credentialKeyRemove()
+          return this.$router.push({ name: 'Login' })
         }
       })
     }

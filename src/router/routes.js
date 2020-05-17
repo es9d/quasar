@@ -64,7 +64,7 @@ const routes = [
     name: 'About',
     path: '/about',
     // component: AboutPage,
-    meta: { title: 'About Us' }
+    meta: { title: 'About' }
   }
 ]
 
