@@ -57,13 +57,31 @@ const routes = [
         path: '/user/history/login/:log_code',
         component: () => import('pages/Page/User/HistoryLogin.vue'),
         meta: { title: 'Login History' }
+      },
+      {
+        path: '/menu-admin',
+        component: () => import('layouts/Page/Admin/MenuLayout.vue'),
+        children: [
+          {
+            name: 'AdminMenu',
+            path: '/',
+            component: () => import('pages/Admin/Menu/AdminMenu.vue'),
+            meta: { title: 'Menu Admin' }
+          },
+          {
+            name: 'AdminMenuUserList',
+            path: '/menu-admin/users',
+            // component:,
+            meta: { title: 'List Users' }
+          }
+        ]
       }
     ]
   },
   {
     name: 'About',
     path: '/about',
-    // component: AboutPage,
+    component: () => import('pages/About.vue'),
     meta: { title: 'About' }
   }
 ]
