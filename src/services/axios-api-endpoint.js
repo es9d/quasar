@@ -26,7 +26,9 @@ const RestServices = {
   patchUserBiodata: (time, name, image) => axios.patch(`/api/user/profile/${time}?_update=biodata`, { name, image }, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, 'info')),
   patchUserPassword: (time, oldpass, newpass) => axios.patch(`/api/user/profile/${time}?_update=password`, { old_pass: oldpass, new_pass: newpass }, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, 'info')),
   // ! admin maintenance
-  getResAdminMenuIndex: (request = 'countOnly') => axios.get(`/api/admin/menu?_users=${request}`, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, 'error'))
+  getResAdminMenuIndex: (request = 'countOnly') => axios.get(`/api/admin/menu?_users=${request}`, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, 'error')),
+  getResAdminMenuUsersList: () => axios.get('/api/admin/menu?_users=full', CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, 'error')),
+  getResAdminMenuUserDetail: (userCode) => axios.get(`/api/admin/menu?_user=${userCode}`, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, 'error'))
 }
 
 const axiosResErrorNotify = (err, type) => Notify.notifyResponse(type, AxiosResponse.catchError(err))

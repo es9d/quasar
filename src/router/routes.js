@@ -71,8 +71,20 @@ const routes = [
           {
             name: 'AdminMenuUserList',
             path: '/menu-admin/users',
-            // component:,
+            component: () => import('pages/Admin/Menu/AdminMenuUserList.vue'),
             meta: { title: 'List Users' }
+          },
+          {
+            name: 'AdminMenuUserDetail',
+            path: '/menu-admin/user/:code/detail',
+            component: () => import('pages/Admin/Menu/AdminMenuUserDetail.vue'),
+            meta: { title: 'User Detail' }
+          },
+          {
+            name: 'AdminMenuUserHistoryDetail',
+            path: '/menu-admin/user/:code/history/:log_code/detail',
+            component: () => import('pages/Page/User/HistoryLogin.vue'),
+            meta: { title: 'User History Detail' }
           }
         ]
       }

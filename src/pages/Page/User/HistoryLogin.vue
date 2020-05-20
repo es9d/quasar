@@ -12,6 +12,26 @@
                 <td
                   class="text-bold"
                   colspan="2"
+                >User Log</td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <div class="user-panel d-flex">
+                    <div class="image">
+                      <img
+                        :src="asset_img+logDetailData.user_img"
+                        class="img-circle"
+                        alt="Profile Image"
+                      />
+                    </div>
+                    <div class="info">{{logDetailData.user_name}}</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  class="text-bold"
+                  colspan="2"
                 >Date Time</td>
               </tr>
               <tr>
@@ -104,6 +124,7 @@ export default {
   },
   data () {
     return {
+      asset_img: this.$AppHelper.apiEndpoint(),
       logCode: this.$route.params.log_code,
       logDetailData: null
     }
