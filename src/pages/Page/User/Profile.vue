@@ -46,6 +46,13 @@
                 data-toggle="tab"
               >Password</a>
             </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-bold"
+                href="#security"
+                data-toggle="tab"
+              >Security</a>
+            </li>
           </ul>
         </div>
         <div class="card-body">
@@ -68,6 +75,12 @@
             >
               <ManagementPassword />
             </div>
+            <div
+              class="tab-pane"
+              id="security"
+            >
+              <LoginSecurity />
+            </div>
           </div>
         </div>
       </div>
@@ -82,7 +95,8 @@ export default {
   components: {
     HistoryLogins: () => import('src/components/App/Profile/History/HistoryLogins'),
     ManagementBiodata: () => import('src/components/App/Profile/Management/ManagementBiodata'),
-    ManagementPassword: () => import('src/components/App/Profile/Management/ManagementPassword')
+    ManagementPassword: () => import('src/components/App/Profile/Management/ManagementPassword'),
+    LoginSecurity: () => import('src/components/App/Profile/Security/LoginSecurity')
   },
   computed: {
     ...mapGetters('AuthStore', ['thisBiodata'])

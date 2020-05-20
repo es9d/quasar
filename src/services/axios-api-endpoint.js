@@ -17,6 +17,7 @@ const RestServices = {
   getUserLoginHistoryByCode: (_logdetailuser) => axios.get(`/api/user/history/login?_logdetailuser=${_logdetailuser}`, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, '')),
   postLogin: (email, password, devData) => axios.post('/api/auth/login', { email, password, device: devData.device, devdata: LocSer.serialize(devData.data) }).catch(err => axiosResErrorNotify(err, 'info')),
   postLogout: () => axios.post('/api/auth/logout', {}, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, '')),
+  postLogoutRevokes: () => axios.post('/api/auth/logout', { _action: 'revoke' }, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, '')),
   postRegister: (name, email, password) => axios.post('/api/auth/register', { name, email, password }).catch(err => axiosResErrorNotify(err, 'info')),
   postVerifyRegister: (_access) => axios.post('/api/access/register/verify', { _access }).catch(err => axiosResErrorNotify(err, 'info')),
   postLostPassword: (email) => axios.post('/api/auth/lost-password', { email }).catch(err => axiosResErrorNotify(err, 'info')),
