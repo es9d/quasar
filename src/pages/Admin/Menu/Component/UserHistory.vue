@@ -39,7 +39,7 @@
 export default {
   name: 'UserHistory',
   updated () {
-    this.$(() => { this.$('#list-user-history').DataTable({ autoWidth: false, responsive: true, ordering: false }) })
+    this.$(() => { this.$.fn.dataTable.ext.errMode = 'none'; this.$('#list-user-history').DataTable({ autoWidth: false, responsive: true, ordering: false }) })
   },
   props: {
     userHistory: null

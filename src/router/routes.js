@@ -101,8 +101,10 @@ const routes = [
 // Always leave this as last one
 if (process.env.MODE !== 'ssr') {
   routes.push({
+    name: 'PageNotFound',
     path: '*',
-    component: () => import('pages/Error404.vue')
+    component: () => import('pages/Error404.vue'),
+    meta: { title: 'Page Not Found' }
   })
 }
 

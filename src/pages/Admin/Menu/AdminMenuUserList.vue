@@ -57,7 +57,7 @@ export default {
     this.getResAdminMenuUsersList()
   },
   updated () {
-    this.$(() => { this.$('#list-user-table').DataTable({ autoWidth: false, responsive: true }) })
+    this.$(() => { this.$.fn.dataTable.ext.errMode = 'none'; this.$('#list-user-table').DataTable({ autoWidth: false, responsive: true }) })
   },
   methods: {
     getResAdminMenuUsersList () {

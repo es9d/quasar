@@ -61,7 +61,7 @@
               class="tab-pane"
               id="manage"
             >
-              User Manage
+              <UserManage :userActiveStatusNow="userData.active" />
             </div>
           </div>
         </div>
@@ -74,7 +74,8 @@
 export default {
   name: 'AdminMenuUserDetail',
   components: {
-    UserHistory: () => import('pages/Admin/Menu/Component/UserHistory')
+    UserHistory: () => import('pages/Admin/Menu/Component/UserHistory'),
+    UserManage: () => import('pages/Admin/Menu/Component/UserManage')
   },
   created () {
     this.getResAdminMenuUserDetail()
