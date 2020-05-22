@@ -1,21 +1,24 @@
 <template>
-  <router-view />
+  <div>
+    <div v-if="thisBiodata.status === 'Admin'">
+      <router-view />
+    </div>
+    <div v-else>
+      {{PageNotFound()}}
+    </div>
+  </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 export default {
   name: 'MenuLayout',
-  async created () {
-    await this.checkIsAdmin()
-  },
   computed: {
     ...mapGetters('AuthStore', ['thisBiodata'])
   },
   methods: {
-    checkIsAdmin () {
-      const status = this.thisBiodata.status
-      if (status !== 'Admin') this.$router.push({ name: 'Home' })
+    PageNotFound () {
+      return this.$router.push({ name: 'PageNotFound' })
     }
   }
 }

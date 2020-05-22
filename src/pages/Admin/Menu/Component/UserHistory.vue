@@ -1,8 +1,11 @@
 <template>
-  <div id="user-history">
+  <div
+    class="table-responsive"
+    id="user-history"
+  >
     <p class="text-bold text-center">--- Login History ---</p>
     <table
-      class="table table-bordered table-hover"
+      class="table table-borderless table-hover"
       id="list-user-history"
     >
       <thead>

@@ -1,10 +1,10 @@
 <template>
   <div id="users-list">
     <div class="card">
-      <div class="card-body">
+      <div class="card-body table-responsive">
         <table
           id="list-user-table"
-          class="table table-bordered table-hover"
+          class="table table-borderless table-hover"
         >
           <thead>
             <tr class="text-center">
