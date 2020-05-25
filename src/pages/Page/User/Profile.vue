@@ -35,16 +35,9 @@
             <li class="nav-item">
               <a
                 class="nav-link text-bold"
-                href="#biodata"
+                href="#account"
                 data-toggle="tab"
-              >Biodata</a>
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link text-bold"
-                href="#password"
-                data-toggle="tab"
-              >Password</a>
+              >Account</a>
             </li>
             <li class="nav-item">
               <a
@@ -65,20 +58,16 @@
             </div>
             <div
               class="tab-pane"
-              id="biodata"
+              id="account"
             >
               <ManagementBiodata />
             </div>
             <div
               class="tab-pane"
-              id="password"
-            >
-              <ManagementPassword />
-            </div>
-            <div
-              class="tab-pane"
               id="security"
             >
+              <ManagementPassword />
+              <hr>
               <LoginSecurity />
             </div>
           </div>

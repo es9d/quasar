@@ -60,7 +60,7 @@
       </p>
     </div>
     <button
-      class="btn btn-primary float-right text-bold"
+      class="btn btn-primary text-bold"
       @click="profileUpdatePassword"
     >
       <i class="fas fa-key"></i>&ensp;Update Password
