@@ -62,6 +62,8 @@
               id="manage"
             >
               <UserManage :userActiveStatusNow="userData.active" />
+              <hr>
+              <UserDelete />
             </div>
           </div>
         </div>
@@ -75,7 +77,8 @@ export default {
   name: 'AdminMenuUserDetail',
   components: {
     UserHistory: () => import('pages/Admin/Menu/Component/UserHistory'),
-    UserManage: () => import('pages/Admin/Menu/Component/UserManage')
+    UserManage: () => import('pages/Admin/Menu/Component/UserManage'),
+    UserDelete: () => import('pages/Admin/Menu/Component/UserDelete')
   },
   created () {
     this.getResAdminMenuUserDetail()
