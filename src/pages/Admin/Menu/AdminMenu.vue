@@ -4,7 +4,7 @@
       <div class="col-12 col-sm-6 col-lg-3">
         <div class="small-box bg-info">
           <div class="inner">
-            <h3>{{this.countOfUsers}}</h3>
+            <h3>{{countOfUsers}}</h3>
             <p>Users</p>
           </div>
           <div class="icon">
@@ -25,25 +25,25 @@
           <div class="icon">
             <i class="ion ion-stats-bars"></i>
           </div>
-          <a
-            href="#"
+          <router-link
+            :to="{name:'AdminMenuUserList'}"
             class="small-box-footer"
-          >More info <i class="fas fa-arrow-circle-right"></i></a>
+          >More info <i class="fas fa-arrow-circle-right"></i></router-link>
         </div>
       </div>
       <div class="col-12 col-sm-6 col-lg-3">
         <div class="small-box bg-warning">
           <div class="inner">
-            <h3>44</h3>
-            <p>User Registrations</p>
+            <h3>{{countOfNewMembers}}</h3>
+            <p>New Members</p>
           </div>
           <div class="icon">
-            <i class="ion ion-person-add"></i>
+            <i class="fas fa-user-plus"></i>
           </div>
-          <a
-            href="#"
+          <router-link
+            :to="{name:'AdminMenuNewMemberList'}"
             class="small-box-footer"
-          >More info <i class="fas fa-arrow-circle-right"></i></a>
+          >More info <i class="fas fa-arrow-circle-right"></i></router-link>
         </div>
       </div>
       <div class="col-12 col-sm-6 col-lg-3">
@@ -55,10 +55,10 @@
           <div class="icon">
             <i class="ion ion-pie-graph"></i>
           </div>
-          <a
-            href="#"
+          <router-link
+            :to="{name:'AdminMenuUserList'}"
             class="small-box-footer"
-          >More info <i class="fas fa-arrow-circle-right"></i></a>
+          >More info <i class="fas fa-arrow-circle-right"></i></router-link>
         </div>
       </div>
     </div>
@@ -77,13 +77,15 @@ export default {
         this.$axios.getResAdminMenuIndex().then((res) => {
           const data = res.data.response_data
           this.countOfUsers = data.users || 0
+          this.countOfNewMembers = data.newMembers || 0
         })
       })
     }
   },
   data () {
     return {
-      countOfUsers: 0
+      countOfUsers: 0,
+      countOfNewMembers: 0
     }
   }
 }

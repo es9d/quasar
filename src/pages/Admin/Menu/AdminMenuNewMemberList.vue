@@ -9,14 +9,14 @@
           <thead>
             <tr class="text-center">
               <th>Name</th>
+              <th>Status</th>
               <th>Active</th>
               <th>Registered</th>
-              <th>Last Login</th>
             </tr>
           </thead>
           <tbody>
             <tr
-              v-for="(user, idx) in listOfUsers"
+              v-for="(user, idx) in listOfNewMembers"
               :key="idx"
             >
               <td>
@@ -36,12 +36,12 @@
                   </div>
                 </div>
               </td>
+              <td class="text-center">{{user.status}}</td>
               <td
                 class="text-center"
                 v-html="userActiveConvert(user.active)"
               />
               <td class="text-center">{{user.registered}}</td>
-              <td class="text-center">{{user.last_login}}</td>
             </tr>
           </tbody>
         </table>
@@ -52,19 +52,19 @@
 
 <script>
 export default {
-  name: 'AdminMenuUserList',
+  name: 'AdminMenuNewMemberList',
   created () {
-    this.getResAdminMenuUsersList()
+    this.getResAdminMenuNewMembersList()
   },
   updated () {
     this.$(() => { this.$.fn.dataTable.ext.errMode = 'none'; this.$('#list-user-table').DataTable({ autoWidth: false, responsive: true }) })
   },
   methods: {
-    getResAdminMenuUsersList () {
+    getResAdminMenuNewMembersList () {
       this.$axios.getCookies().then(() => {
-        this.$axios.getResAdminMenuUsersList().then((res) => {
+        this.$axios.getResAdminMenuNewMembersList().then((res) => {
           const data = res.data.response_data
-          this.listOfUsers = data.users.list || []
+          this.listOfNewMembers = data.newMembers.list || []
         })
       })
     },
@@ -81,7 +81,7 @@ export default {
   data () {
     return {
       asset_img: this.$AppHelper.apiEndpoint(),
-      listOfUsers: []
+      listOfNewMembers: []
     }
   }
 }

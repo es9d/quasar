@@ -72,7 +72,13 @@ const routes = [
             name: 'AdminMenuUserList',
             path: '/menu-admin/users',
             component: () => import('pages/Admin/Menu/AdminMenuUserList.vue'),
-            meta: { title: 'List Users' }
+            meta: { title: 'Users' }
+          },
+          {
+            name: 'AdminMenuNewMemberList',
+            path: '/menu-admin/new-members',
+            component: () => import('pages/Admin/Menu/AdminMenuNewMemberList.vue'),
+            meta: { title: 'New Members' }
           },
           {
             name: 'AdminMenuUserDetail',
