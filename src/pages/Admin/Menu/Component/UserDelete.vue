@@ -35,9 +35,14 @@ export default {
         cancelButtonText: 'Cancel'
       }).then(async result => {
         if (result.value) {
-          this.$axios.getCookies().then(async () => {
-            await this.$axios.deleteAdminMenuUserDelete(this.appTimeNow, this.userCode).then(res => {
-              alert(res.data)
+          this.$axios.getCookies().then(() => {
+            this.$axios.deleteAdminMenuUserDelete(this.appTimeNow, this.userCode).then(async res => {
+              if (res.data.status === 'success') {
+                await Swal.fire('Success', `${res.data.message}`, 'success')
+                return this.$router.push({ name: 'AdminMenuUserList' })
+              } else {
+                Swal.fire('Failed', `${res.data.message}`, 'error')
+              }
             })
           })
         }
