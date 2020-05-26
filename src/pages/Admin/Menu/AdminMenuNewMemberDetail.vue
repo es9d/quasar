@@ -10,13 +10,6 @@
             <li class="nav-item">
               <a
                 class="nav-link text-bold active"
-                href="#history"
-                data-toggle="tab"
-              >History</a>
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link text-bold"
                 href="#manage"
                 data-toggle="tab"
               >Manage</a>
@@ -27,17 +20,9 @@
           <div class="tab-content">
             <div
               class="tab-pane active"
-              id="history"
-            >
-              <UserHistory :userHistory="userHist" />
-            </div>
-            <div
-              class="tab-pane"
               id="manage"
             >
-              <UserManage :userActiveStatusNow="userData.active" />
-              <hr>
-              <UserDelete />
+              Manage
             </div>
           </div>
         </div>
@@ -48,12 +33,9 @@
 
 <script>
 export default {
-  name: 'AdminMenuUserDetail',
+  name: 'AdminMenuNewMember',
   components: {
-    UserProperty: () => import('pages/Admin/Menu/Component/UserProperty'),
-    UserHistory: () => import('pages/Admin/Menu/Component/UserHistory'),
-    UserManage: () => import('pages/Admin/Menu/Component/UserManage'),
-    UserDelete: () => import('pages/Admin/Menu/Component/UserDelete')
+    UserProperty: () => import('pages/Admin/Menu/Component/UserProperty')
   },
   created () {
     this.getResAdminMenuUserDetail()
@@ -65,7 +47,6 @@ export default {
           const data = res.data.response_data
           if (data.user.length === 0) return this.$router.push({ name: 'AdminMenuUserList' })
           this.userData = data.user || null
-          this.userHist = data.history.reverse() || null
         })
       })
     }
@@ -73,8 +54,7 @@ export default {
   data () {
     return {
       userCode: this.$route.params.code,
-      userData: { profile_img: this.$AppHelper.defaultProfileImg() },
-      userHist: null
+      userData: { profile_img: this.$AppHelper.defaultProfileImg() }
     }
   }
 }

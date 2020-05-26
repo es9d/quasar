@@ -75,16 +75,34 @@ const routes = [
             meta: { title: 'Users' }
           },
           {
+            name: 'AdminMenuUnlistedUsersList',
+            path: '/menu-admin/unlisted-users',
+            component: () => import('pages/Admin/Menu/AdminMenuUnlistedUsersList.vue'),
+            meta: { title: 'Unlisted Users' }
+          },
+          {
             name: 'AdminMenuNewMemberList',
             path: '/menu-admin/new-members',
             component: () => import('pages/Admin/Menu/AdminMenuNewMemberList.vue'),
             meta: { title: 'New Members' }
           },
           {
+            name: 'AdminMenuLostPasswordList',
+            path: '/menu-admin/lost-password',
+            component: () => import('pages/Admin/Menu/AdminMenuLostPasswordList.vue'),
+            meta: { title: 'Lost Password' }
+          },
+          {
             name: 'AdminMenuUserDetail',
             path: '/menu-admin/user/:code/detail',
             component: () => import('pages/Admin/Menu/AdminMenuUserDetail.vue'),
             meta: { title: 'User Detail' }
+          },
+          {
+            name: 'AdminMenuNewMemberDetail',
+            path: '/menu-admin/new-member/:code/detail',
+            component: () => import('pages/Admin/Menu/AdminMenuNewMemberDetail.vue'),
+            meta: { title: 'New Member Detail' }
           },
           {
             name: 'AdminMenuUserHistoryDetail',

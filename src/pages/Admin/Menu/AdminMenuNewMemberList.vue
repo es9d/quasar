@@ -30,7 +30,7 @@
                   </div>
                   <div class="info">
                     <router-link
-                      :to="{ name: 'AdminMenuUserDetail', params:{code:user.code} }"
+                      :to="{ name: 'AdminMenuNewMemberDetail', params:{code:user.code} }"
                       class="d-block"
                     >{{user.name}}</router-link>
                   </div>

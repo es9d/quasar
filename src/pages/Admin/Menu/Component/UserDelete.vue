@@ -40,9 +40,7 @@ export default {
               if (res.data.status === 'success') {
                 await Swal.fire('Success', `${res.data.message}`, 'success')
                 return this.$router.push({ name: 'AdminMenuUserList' })
-              } else {
-                Swal.fire('Failed', `${res.data.message}`, 'error')
-              }
+              } else Swal.fire('Failed', `${res.data.message}`, 'error')
             })
           })
         }

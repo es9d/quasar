@@ -17,22 +17,22 @@
         </div>
       </div>
       <div class="col-12 col-sm-6 col-lg-3">
-        <div class="small-box bg-success">
+        <div class="small-box bg-info">
           <div class="inner">
-            <h3>53<sup style="font-size: 20px">%</sup></h3>
-            <p>Bounce Rate</p>
+            <h3>{{countOfUnlistedUsers}}</h3>
+            <p>Unlisted Users</p>
           </div>
           <div class="icon">
-            <i class="ion ion-stats-bars"></i>
+            <i class="fas fa-user-minus"></i>
           </div>
           <router-link
-            :to="{name:'AdminMenuUserList'}"
+            :to="{name:'AdminMenuUnlistedUsersList'}"
             class="small-box-footer"
           >More info <i class="fas fa-arrow-circle-right"></i></router-link>
         </div>
       </div>
       <div class="col-12 col-sm-6 col-lg-3">
-        <div class="small-box bg-warning">
+        <div class="small-box bg-info">
           <div class="inner">
             <h3>{{countOfNewMembers}}</h3>
             <p>New Members</p>
@@ -47,16 +47,16 @@
         </div>
       </div>
       <div class="col-12 col-sm-6 col-lg-3">
-        <div class="small-box bg-danger">
+        <div class="small-box bg-info">
           <div class="inner">
-            <h3>65</h3>
-            <p>Unique Visitors</p>
+            <h3>{{countOfLostPassword}}</h3>
+            <p>Lost Password</p>
           </div>
           <div class="icon">
-            <i class="ion ion-pie-graph"></i>
+            <i class="fas fa-user-lock"></i>
           </div>
           <router-link
-            :to="{name:'AdminMenuUserList'}"
+            :to="{name:'AdminMenuLostPasswordList'}"
             class="small-box-footer"
           >More info <i class="fas fa-arrow-circle-right"></i></router-link>
         </div>
@@ -77,7 +77,9 @@ export default {
         this.$axios.getResAdminMenuIndex().then((res) => {
           const data = res.data.response_data
           this.countOfUsers = data.users || 0
+          this.countOfUnlistedUsers = data.unlistedUsers || 0
           this.countOfNewMembers = data.newMembers || 0
+          this.countOfLostPassword = data.lostPassword || 0
         })
       })
     }
@@ -85,7 +87,9 @@ export default {
   data () {
     return {
       countOfUsers: 0,
-      countOfNewMembers: 0
+      countOfUnlistedUsers: 0,
+      countOfNewMembers: 0,
+      countOfLostPassword: 0
     }
   }
 }
