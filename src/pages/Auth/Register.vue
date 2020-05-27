@@ -122,9 +122,9 @@ export default {
       }).then(async result => {
         if (result.value) {
           if (this.boolName && this.boolEmail && this.boolPassword) {
-            this.$('#input-submit').prop('disabled', true)
+            this.$(() => this.$('#input-submit').prop('disabled', true))
             await this.postNewMember()
-            this.$('#input-submit').prop('disabled', false)
+            this.$(() => this.$('#input-submit').prop('disabled', false))
           } else {
             Swal.fire(
               'Waitt!',

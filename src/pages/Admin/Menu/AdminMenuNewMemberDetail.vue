@@ -10,9 +10,9 @@
             <li class="nav-item">
               <a
                 class="nav-link text-bold active"
-                href="#manage"
+                href="#member-management"
                 data-toggle="tab"
-              >Manage</a>
+              >Member Management</a>
             </li>
           </ul>
         </div>
@@ -20,9 +20,11 @@
           <div class="tab-content">
             <div
               class="tab-pane active"
-              id="manage"
+              id="member-management"
             >
-              Manage
+              <UserRegisterConfirm :registerAccess="userData.access" />
+              <hr>
+              <UserDelete />
             </div>
           </div>
         </div>
@@ -33,19 +35,21 @@
 
 <script>
 export default {
-  name: 'AdminMenuNewMember',
+  name: 'AdminMenuNewMemberDetail',
   components: {
-    UserProperty: () => import('pages/Admin/Menu/Component/UserProperty')
+    UserProperty: () => import('pages/Admin/Menu/Component/UserProperty'),
+    UserRegisterConfirm: () => import('pages/Admin/Menu/Component/UserRegisterConfirm'),
+    UserDelete: () => import('pages/Admin/Menu/Component/UserDelete')
   },
   created () {
-    this.getResAdminMenuUserDetail()
+    this.getResAdminMenuNewMemberDetail()
   },
   methods: {
-    getResAdminMenuUserDetail () {
+    getResAdminMenuNewMemberDetail () {
       this.$axios.getCookies().then(() => {
-        this.$axios.getResAdminMenuUserDetail(this.userCode).then((res) => {
+        this.$axios.getResAdminMenuNewMemberDetail(this.userCode).then((res) => {
           const data = res.data.response_data
-          if (data.user.length === 0) return this.$router.push({ name: 'AdminMenuUserList' })
+          if (data.user.length === 0) return this.$router.push({ name: 'AdminMenuNewMemberList' })
           this.userData = data.user || null
         })
       })

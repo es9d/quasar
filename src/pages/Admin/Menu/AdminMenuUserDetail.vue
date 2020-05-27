@@ -17,9 +17,9 @@
             <li class="nav-item">
               <a
                 class="nav-link text-bold"
-                href="#manage"
+                href="#member-management"
                 data-toggle="tab"
-              >Manage</a>
+              >Member Management</a>
             </li>
           </ul>
         </div>
@@ -33,7 +33,7 @@
             </div>
             <div
               class="tab-pane"
-              id="manage"
+              id="member-management"
             >
               <UserManage :userActiveStatusNow="userData.active" />
               <hr>

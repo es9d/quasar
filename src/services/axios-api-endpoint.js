@@ -33,6 +33,7 @@ const RestServices = {
   getResAdminMenuNewMembersList: () => axios.get('/api/admin/menu?_newMembers=full', CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, 'error')),
   getResAdminMenuLostPasswordList: () => axios.get('/api/admin/menu?_lostPassword=full', CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, 'error')),
   getResAdminMenuUserDetail: (userCode) => axios.get(`/api/admin/menu?_user=${userCode}`, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, 'error')),
+  getResAdminMenuNewMemberDetail: (userCode) => axios.get(`/api/admin/menu?_newMember=${userCode}`, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, 'error')),
   patchAdminMenuSetNewUserActiveStatus: (time, userCode, newActStat) => axios.patch(`/api/admin/menu/${time}`, { _user: userCode, _setNewActiveStatus: newActStat }, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, 'error')),
   deleteAdminMenuUserDelete: (time, userCode, delMeth = 'default') => axios.delete(`/api/admin/menu/${time}?_userDelete=${userCode}&_method=${delMeth}`, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, 'error'))
 }

@@ -69,7 +69,9 @@ export default {
         confirmButtonText: 'Yes, send now!'
       }).then(async result => {
         if (result.value) {
+          this.$(() => this.$('#input-submit').prop('disabled', true))
           await this.sendRequest()
+          this.$(() => this.$('#input-submit').prop('disabled', false))
         }
       })
     },
