@@ -7,56 +7,85 @@
           class="login-box-msg"
           id="view-login-msg"
         >Sign in to start your session</p>
-        <form
-          id="form-login"
-          @submit.prevent="submitLogin"
-        >
-          <div class="input-group mb-3">
-            <input
-              type="email"
-              class="form-control theInput"
-              id="input-email"
-              placeholder="E-Mail"
-              v-model="thisEmail"
-            />
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-at"></span>
+        <div v-if="!haveLoginSaved || needLoginManual">
+          <form
+            id="form-login"
+            @submit.prevent="submitLogin"
+          >
+            <div class="input-group mb-3">
+              <input
+                type="email"
+                class="form-control theInput"
+                id="input-email"
+                placeholder="E-Mail"
+                v-model="thisEmail"
+              />
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="fas fa-at"></span>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="input-group mb-3">
-            <input
-              type="password"
-              class="form-control theInput"
-              id="input-password"
-              placeholder="Password"
-              v-model="thisPassword"
-            />
-            <div class="input-group-append">
-              <div
-                class="input-group-text"
-                @click="passwordWatch(true)"
-              >
-                <span
-                  class="fas fa-lock"
-                  id="span-password"
-                ></span>
+            <div class="input-group mb-3">
+              <input
+                type="password"
+                class="form-control theInput"
+                id="input-password"
+                placeholder="Password"
+                v-model="thisPassword"
+              />
+              <div class="input-group-append">
+                <div
+                  class="input-group-text"
+                  @click="passwordWatch(true)"
+                >
+                  <span
+                    class="fas fa-lock"
+                    id="span-password"
+                  ></span>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="row mb-3">
-            <div class="offset-0 offset-sm-7 col-12 col-sm-5">
-              <button
-                type="submit"
-                class="btn btn-primary btn-block text-bold"
-                id="input-submit"
-              >
-                <i class="fas fa-sign-in-alt"></i>&ensp;Login
-              </button>
+            <div class="row mb-3">
+              <div class="offset-0 offset-sm-7 col-12 col-sm-5">
+                <button
+                  type="submit"
+                  class="btn btn-primary btn-block text-bold"
+                  id="input-submit"
+                >
+                  <i class="fas fa-sign-in-alt"></i>&ensp;Login
+                </button>
+              </div>
             </div>
+          </form>
+        </div>
+        <div v-else>
+          <LoginSaved />
+        </div>
+        <div v-show="haveLoginSaved">
+          <div v-if="!needLoginManual">
+            <p class="mb-1">
+              <a
+                href=""
+                class="text-primary"
+                @click.prevent="manualLoginManipulator"
+              >
+                <i class="fas fa-user-lock"></i>&ensp;I want manual login
+              </a>
+            </p>
           </div>
-        </form>
+          <div v-else>
+            <p class="mb-1">
+              <a
+                href=""
+                class="text-primary"
+                @click.prevent="manualLoginManipulator"
+              >
+                <i class="fas fa-user-shield"></i>&ensp;Open my saved login
+              </a>
+            </p>
+          </div>
+        </div>
         <p class="mb-1">
           <router-link
             :to="{ name: 'ForgetPassword' }"
@@ -84,6 +113,9 @@ import ForgeJs from 'src/third-party/library/forgejs.min'
 import RegexValidation from 'src/third-party/helper/regex-validation.min'
 export default {
   name: 'Login',
+  components: {
+    LoginSaved: () => import('pages/Auth/LoginSaved')
+  },
   created () {
     if (this.$CredMng.credentialKeyTake()) {
       this.autoLogin()
@@ -244,6 +276,9 @@ export default {
         }
       }
     },
+    manualLoginManipulator () {
+      this.needLoginManual = this.needLoginManual ? !1 : !0
+    },
     catchError (error) {
       this.$('#view-login-msg').html(this.spanMessage('danger', this.$axiosRes.catchError(error)))
       this.$('#input-submit').prop('disabled', false)
@@ -266,7 +301,9 @@ export default {
     return {
       thisEmail: '',
       thisPassword: '',
-      passwordViewAble: false
+      passwordViewAble: false,
+      haveLoginSaved: false,
+      needLoginManual: false
     }
   }
 }
