@@ -37,7 +37,7 @@
             >
               <UserManage :userActiveStatusNow="userData.active" />
               <hr>
-              <UserDelete />
+              <UserDelete :defaultReturn="routeName" />
             </div>
           </div>
         </div>
@@ -72,6 +72,7 @@ export default {
   },
   data () {
     return {
+      routeName: 'AdminMenuUserList',
       userCode: this.$route.params.code,
       userData: { profile_img: this.$AppHelper.defaultProfileImg() },
       userHist: null

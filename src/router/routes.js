@@ -99,6 +99,12 @@ const routes = [
             meta: { title: 'User Detail' }
           },
           {
+            name: 'AdminMenuUnlistedUsersDetail',
+            path: '/menu-admin/unlisted-user/:code/detail',
+            component: () => import('pages/Admin/Menu/AdminMenuUnlistedUsersDetail.vue'),
+            meta: { title: 'Unlisted User Detail' }
+          },
+          {
             name: 'AdminMenuNewMemberDetail',
             path: '/menu-admin/new-member/:code/detail',
             component: () => import('pages/Admin/Menu/AdminMenuNewMemberDetail.vue'),

@@ -22,9 +22,12 @@
               class="tab-pane active"
               id="member-management"
             >
-              <UserRegisterConfirm :registerAccess="userData.access" />
+              <UserRegisterConfirm
+                :defaultReturn="routeName"
+                :registerAccess="userData.access"
+              />
               <hr>
-              <UserDelete />
+              <UserDelete :defaultReturn="routeName" />
             </div>
           </div>
         </div>
@@ -57,6 +60,7 @@ export default {
   },
   data () {
     return {
+      routeName: 'AdminMenuNewMemberList',
       userCode: this.$route.params.code,
       userData: { profile_img: this.$AppHelper.defaultProfileImg() }
     }

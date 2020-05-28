@@ -4,6 +4,11 @@
 
 <script>
 export default {
-  name: 'AdminMenuLostPasswordList'
+  name: 'AdminMenuLostPasswordList',
+  data () {
+    return {
+      routeName: 'AdminMenuLostPasswordList'
+    }
+  }
 }
 </script>
