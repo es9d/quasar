@@ -4,6 +4,7 @@ import VueMeta from 'vue-meta'
 
 // ? Auth
 import CredMng from 'src/third-party/auth/credential-manager.min'
+import SavedLogin from 'src/third-party/auth/saved-login-lib.min'
 
 // ? Helpers
 import AppHelper from 'src/third-party/helper/app-helper.min'
@@ -37,6 +38,7 @@ Vue.prototype.$axiosRes = AxiosResponse
 Vue.prototype.$ = JQuery
 Vue.prototype.$AppHelper = AppHelper
 Vue.prototype.$CredMng = CredMng
+Vue.prototype.$SavedLogin = SavedLogin
 Vue.prototype.$Device = DeviceDetect
 Vue.prototype.$Notify = AppNotify
 Vue.prototype.$Toastr = Toastr
