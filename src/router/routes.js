@@ -111,6 +111,12 @@ const routes = [
             meta: { title: 'New Member Detail' }
           },
           {
+            name: 'AdminMenuLostPasswordDetail',
+            path: '/menu-admin/lost-password/:code/detail',
+            component: () => import('pages/Admin/Menu/AdminMenuLostPasswordDetail.vue'),
+            meta: { title: 'Lost Password Detail' }
+          },
+          {
             name: 'AdminMenuUserHistoryDetail',
             path: '/menu-admin/user/:code/history/:log_code/detail',
             component: () => import('pages/Page/User/HistoryLogin.vue'),

@@ -52,7 +52,7 @@ export default {
       this.$axios.getCookies().then(() => {
         this.$axios.getResAdminMenuNewMemberDetail(this.userCode).then((res) => {
           const data = res.data.response_data
-          if (data.user.length === 0) return this.$router.push({ name: 'AdminMenuNewMemberList' })
+          if (data.user.length === 0) return this.$router.push({ name: this.routeName })
           this.userData = data.user || null
         })
       })

@@ -1,5 +1,5 @@
 <template>
-  <div id="users-list">
+  <div id="unlisted-users-list">
     <div class="card">
       <div class="card-body table-responsive">
         <table
