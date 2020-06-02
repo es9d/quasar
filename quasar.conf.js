@@ -188,6 +188,10 @@ module.exports = function (/* ctx */) {
         // do something with Electron main process Webpack cfg
         // chainWebpack also available besides this extendWebpack
       }
+    },
+    bin: {
+      linuxAndroidStudio:
+        "/snap/android-studio/current/android-studio/bin/studio.sh"
     }
   }
 }

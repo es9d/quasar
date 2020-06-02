@@ -2,7 +2,7 @@
   <div class="login-box">
     <div class="login-logo text-white">{{this.$AppHelper.appName()}}</div>
     <div class="card">
-      <div class="card-body login-card-body">
+      <div class="card-body login-card-body rounded">
         <p class="login-box-msg">You are only one step a way from your new password, recover your password now.</p>
         <div class="input-group">
           <input

@@ -2,7 +2,7 @@
   <div class="login-box">
     <div class="login-logo text-white">{{ this.$AppHelper.appName() }}</div>
     <div class="card">
-      <div class="card-body login-card-body">
+      <div class="card-body login-card-body rounded">
         <p
           class="login-box-msg"
           id="view-login-msg"
@@ -136,7 +136,7 @@ export default {
           )
           await this.postLogin(
             this.thisEmail,
-            ForgeJs.encryptPassword(this.thisPassword)
+            this.thisPassword
           )
         } else {
           this.$Notify.notifyInfo(mail.message)
@@ -159,7 +159,7 @@ export default {
         .getCookies()
         .then(() => {
           this.$axios
-            .postLogin(email, password, this.$Device('login', true))
+            .postLogin(email, ForgeJs.encryptPassword(password), this.$Device('login', true))
             .then(response => this.loginResponse(response.data))
             .catch(error => this.catchError(error))
         })
@@ -302,7 +302,7 @@ export default {
       thisEmail: '',
       thisPassword: '',
       passwordViewAble: false,
-      haveLoginSaved: false,
+      haveLoginSaved: true,
       needLoginManual: false
     }
   }

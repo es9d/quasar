@@ -2,7 +2,7 @@
   <div class="login-box">
     <div class="login-logo text-white">{{this.$AppHelper.appName()}}</div>
     <div class="card">
-      <div class="card-body login-card-body">
+      <div class="card-body login-card-body rounded">
         <p class="login-box-msg">Please wait, we'll verify your account.</p>
         <p
           class
