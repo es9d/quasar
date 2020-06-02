@@ -1,13 +1,16 @@
 <template>
-  <div class="container mb-3">
+  <div
+    class="container-fluid mb-3"
+    id="saved-login"
+  >
     <div class="my-1">
       <div
         v-for="(user, idx) in userSavedLoginData"
         :key="idx"
       >
         <div
-          class="border border-info rounded mb-2 hvr-grow-shadow"
-          @click="setPostLogin(idx)"
+          class="border border-info rounded mb-3 hvr-grow-shadow"
+          @click="gotoPostLogin(idx)"
         >
           <div class="user-panel d-flex mx-2 my-1">
             <div class="image">
@@ -18,10 +21,24 @@
               />
             </div>
             <div class="info">{{user.name}}</div>
+            <i
+              @click="deleteSavedLogin(idx)"
+              class="fas fa-times-circle fa-lg mt-2 mr-2 ml-auto delete-login"
+            ></i>
           </div>
         </div>
       </div>
-      <button class="btn btn-sm btn-link text-danger float-right"><i class="fas fa-trash fa-sm"></i>&ensp;delete all</button>
+      <div class="row">
+        <div class="offset-0 offset-sm-7 col-12 col-sm-5">
+          <button
+            type="submit"
+            class="btn btn-outline-danger btn-block text-bold"
+            @click="deleteSavedLogins"
+          >
+            <i class="fas fa-trash fa-sm"></i>&ensp;Delete All
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -30,9 +47,12 @@
 import Swal from 'sweetalert2'
 export default {
   name: 'LoginSaved',
+  created () {
+    this.userSavedLoginData = this.$SavedLogin.loginTake()
+    // this.$SavedLogin.loginSave({ name: 'Killer Bee San', profile_img: '/files/image/profile/default.jpg', username: 'killer@mail.com', password: 'killer' })
+  },
   methods: {
-    setPostLogin (idx) {
-      // alert(`Login menggunakan akun ${this.userSavedLoginData[idx].name}?`)
+    gotoPostLogin (idx) {
       Swal.fire({
         title: `Login using ${this.userSavedLoginData[idx].name}?`,
         icon: 'question',
@@ -41,9 +61,41 @@ export default {
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes!',
         cancelButtonText: 'No!'
+      }).then(async (result) => {
+        if (result.value) {
+          await this.$parent.postLogin(this.userSavedLoginData[idx].username, this.userSavedLoginData[idx].password)
+        }
+      })
+    },
+    deleteSavedLogin (idx) {
+      Swal.fire({
+        title: `Delete login from ${this.userSavedLoginData[idx].name}?`,
+        text: 'You need to login manual after delete',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Delete!',
+        cancelButtonText: 'Cancel!'
       }).then((result) => {
         if (result.value) {
-          this.$parent.postLogin(this.userSavedLoginData[idx].username, this.userSavedLoginData[idx].password)
+          Swal.fire('Success', 'Login has been deleted', 'success')
+        }
+      })
+    },
+    deleteSavedLogins () {
+      Swal.fire({
+        title: 'Delete all saved logins?',
+        text: 'You will lost all your saved login',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Delete All!',
+        cancelButtonText: 'Calcel!'
+      }).then((result) => {
+        if (result.value) {
+          Swal.fire('Success', 'All login saved has been deleted', 'success')
         }
       })
     }
@@ -51,10 +103,11 @@ export default {
   data () {
     return {
       asset_img: this.$AppHelper.apiEndpoint(),
-      userSavedLoginData: [
-        { name: 'Bachtiar', profile_img: '/files/image/profile/default.jpg', username: 'bachtiar@mail.com', password: 'bachtiar' },
-        { name: 'Cashier', profile_img: '/files/image/profile/default.jpg', username: 'cashier@mail.com', password: 'cashier' }
-      ]
+      userSavedLoginData: []
+      // userSavedLoginData: [
+      //   { name: 'Bachtiar', profile_img: '/files/image/profile/default.jpg', username: 'bachtiar@mail.com', password: 'bachtiar' },
+      //   { name: 'Cashier', profile_img: '/files/image/profile/default.jpg', username: 'cashier@mail.com', password: 'cashier' }
+      // ]
     }
   }
 }
@@ -67,8 +120,8 @@ export default {
   -webkit-transform: perspective(1px) translateZ(0);
   transform: perspective(1px) translateZ(0);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -webkit-transition-duration: 0.3s;
-  transition-duration: 0.3s;
+  -webkit-transition-duration: 0.5s;
+  transition-duration: 0.5s;
   -webkit-transition-property: box-shadow, transform;
   transition-property: box-shadow, transform;
 }
@@ -80,10 +133,20 @@ export default {
   transform: scale(1.1);
   background-color: #57abb8;
   color: #ffffff;
+  -webkit-transition-duration: 0.5s;
+  transition-duration: 0.5s;
   transition: background-color 1s ease-out;
   -moz-transition: background-color 1s ease-out;
   -webkit-transition: background-color 1s ease-out;
   -o-transition: background-color 1s ease-out;
 }
 /* ref: http://ianlunn.github.io/Hover/ */
+
+.delete-login:hover {
+  color: red;
+  transition: color 0.5s ease-out;
+  -moz-transition: color 0.5s ease-out;
+  -webkit-transition: color 0.5s ease-out;
+  -o-transition: color 0.5s ease-out;
+}
 </style>

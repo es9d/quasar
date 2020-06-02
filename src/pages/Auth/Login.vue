@@ -225,6 +225,7 @@ export default {
             'Please waitt... <i class="fas fa-spinner fa-pulse"></i>'
           )
         )
+        // await this.$SavedLogin.loginSave({ name: 'Bachtiar', profile_img: '/files/image/profile/default.jpg', username: 'bachtiar@mail.com', password: 'bachtiar' })
         await AwSleep.sleep(3000)
         return this.$router.push({ name: 'Home' })
       } else {
@@ -302,7 +303,7 @@ export default {
       thisEmail: '',
       thisPassword: '',
       passwordViewAble: false,
-      haveLoginSaved: true,
+      haveLoginSaved: this.$SavedLogin.loginCount() || false,
       needLoginManual: false
     }
   }
