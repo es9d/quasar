@@ -22,7 +22,7 @@
             </div>
             <div class="info">{{user.name}}</div>
             <i
-              @click="deleteSavedLogin(idx)"
+              @click.prevent.stop="deleteSavedLogin(idx)"
               class="fas fa-times-circle fa-lg mt-2 mr-2 ml-auto delete-login"
             ></i>
           </div>
@@ -48,10 +48,12 @@ import Swal from 'sweetalert2'
 export default {
   name: 'LoginSaved',
   created () {
-    this.userSavedLoginData = this.$SavedLogin.loginTake()
-    // this.$SavedLogin.loginSave({ name: 'Killer Bee San', profile_img: '/files/image/profile/default.jpg', username: 'killer@mail.com', password: 'killer' })
+    this.getSavedLogins()
   },
   methods: {
+    getSavedLogins () {
+      this.userSavedLoginData = this.$SavedLogin.loginTake()
+    },
     gotoPostLogin (idx) {
       Swal.fire({
         title: `Login using ${this.userSavedLoginData[idx].name}?`,
@@ -77,9 +79,10 @@ export default {
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, Delete!',
         cancelButtonText: 'Cancel!'
-      }).then((result) => {
+      }).then(async (result) => {
         if (result.value) {
-          Swal.fire('Success', 'Login has been deleted', 'success')
+          await this.$SavedLogin.loginRemove(idx)
+          this.getSavedLogins()
         }
       })
     },
@@ -93,9 +96,12 @@ export default {
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, Delete All!',
         cancelButtonText: 'Calcel!'
-      }).then((result) => {
+      }).then(async (result) => {
         if (result.value) {
+          await this.$SavedLogin.loginRemove('all')
           Swal.fire('Success', 'All login saved has been deleted', 'success')
+          this.getSavedLogins()
+          this.$parent.haveLoginSaved = false
         }
       })
     }
@@ -104,10 +110,6 @@ export default {
     return {
       asset_img: this.$AppHelper.apiEndpoint(),
       userSavedLoginData: []
-      // userSavedLoginData: [
-      //   { name: 'Bachtiar', profile_img: '/files/image/profile/default.jpg', username: 'bachtiar@mail.com', password: 'bachtiar' },
-      //   { name: 'Cashier', profile_img: '/files/image/profile/default.jpg', username: 'cashier@mail.com', password: 'cashier' }
-      // ]
     }
   }
 }
