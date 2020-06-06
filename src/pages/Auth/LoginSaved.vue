@@ -65,6 +65,8 @@ export default {
         cancelButtonText: 'No!'
       }).then(async (result) => {
         if (result.value) {
+          this.$parent.thisEmail = this.userSavedLoginData[idx].username
+          this.$parent.thisPassword = this.userSavedLoginData[idx].password
           await this.$parent.postLogin(this.userSavedLoginData[idx].username, this.userSavedLoginData[idx].password)
         }
       })
