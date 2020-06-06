@@ -52,7 +52,12 @@ export default {
   },
   methods: {
     getSavedLogins () {
-      this.userSavedLoginData = this.$SavedLogin.loginTake()
+      if (this.$SavedLogin.loginCount()) {
+        this.$parent.haveLoginSaved = true
+        this.userSavedLoginData = this.$SavedLogin.loginTake()
+      } else {
+        this.$parent.haveLoginSaved = false
+      }
     },
     gotoPostLogin (idx) {
       Swal.fire({
