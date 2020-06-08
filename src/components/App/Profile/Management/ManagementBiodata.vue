@@ -60,6 +60,7 @@
         alt="user-profile-image"
       />
       <div
+        class="mt-3"
         id="profile-image-history"
         style="display:none"
       >
@@ -77,12 +78,15 @@
                 >
                   <div class="card-body">
                     <img
-                      class="imgHistory"
+                      class="imgHistory ml-auto mr-auto"
                       :srcset="`${asset_img}${imgHist.image_origin_url}`"
                       alt="History Image"
                       @click="historyImageChoosed(idx)"
                     >
-                    <button class="btn btn-outline-danger btn-sm btn-block mt-1 text-bold"><i class="fas fa-trash"></i>&ensp;Delete</button>
+                    <button
+                      class="btn btn-outline-danger btn-sm btn-block mt-1 text-bold"
+                      @click="historyImageDelete(idx)"
+                    ><i class="fas fa-trash"></i>&ensp;Delete</button>
                   </div>
                 </div>
               </div>
@@ -92,7 +96,7 @@
         <div v-else>
           <div class="card">
             <div class="card-body">
-              <p class="text-danger text-center mx-0 my-0">You don't have image history yet.</p>
+              <p class="text-danger text-center mx-0 my-0">You have no image history.</p>
             </div>
           </div>
         </div>
@@ -133,7 +137,11 @@ export default {
               this.imageUploadOrigin = ''
               this.imageUploadForm = ''
               this.imageUploadResult = ''
-              this.$Notify.notifyError(`${res.data.message._image[0]}`)
+              try {
+                this.$Notify.notifyError(`${res.data.message._image[0]}`)
+              } catch (error) {
+                this.$Notify.notifyError(`${res.data.message}`)
+              }
             }
           })
           .catch(err => this.catchError('toast', err))
@@ -204,11 +212,36 @@ export default {
       this.btnImgHistoryBool = boolTo
     },
     historyImageChoosed (idx) {
-      const classUsed = 'border border-primary rounded'
+      const classUsed = 'border iborder rounded'
       this.$('.isImgChoosed').removeClass(classUsed)
       this.$(`#imgHistoryID-${idx}`).addClass(classUsed)
       this.imageUploadOrigin = this.imageProfileHistory[idx].image_origin_name
       this.imageUploadForm = this.imageProfileHistory[idx].image_origin_url
+    },
+    historyImageDelete (idx) {
+      Swal.fire({
+        title: 'Delete This Image?',
+        text: `Image "${this.imageProfileHistory[idx].image_origin_name}" will be deleted`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Cancel!',
+        confirmButtonText: 'Yes, Delete!'
+      }).then(async result => {
+        if (result.value) {
+          this.$axios.getCookies().then(async () => {
+            await this.$axios.deleteUserProfileImageHistory(this.appTimeNow, this.imageProfileHistory[idx].image_history_code).then(async res => {
+              await Swal.fire(
+                `${res.data.status === 'success' ? 'Success' : 'Failed'}`,
+                `${res.data.message}`,
+                `${res.data.status}`
+              )
+              return res.data.status === 'success' ? this.getUserProfileImageHistoryList() : ''
+            })
+          })
+        }
+      })
     },
     // above is function, below is helper
     responseFailed (data) {
@@ -292,5 +325,10 @@ export default {
   max-height: 100%;
   display: block; /* remove extra space below image */
 }
-/*  border border-success rounded */
+.iborder {
+  border-color: rgba(0, 123, 255, 0.8);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset,
+    0 0 8px rgba(0, 123, 255, 0.8);
+  outline: 0 none;
+}
 </style>
