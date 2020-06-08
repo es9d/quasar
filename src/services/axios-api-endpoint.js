@@ -15,6 +15,7 @@ const RestServices = {
   getUserProfile: () => axios.get('/api/user/profile', CredMng.axiosHeaderToken()),
   getUserLoginHistory: (_loghistory) => axios.get(`/api/user/history/login?_loghistory=${_loghistory}`, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, '')),
   getUserLoginHistoryByCode: (_logdetailuser) => axios.get(`/api/user/history/login?_logdetailuser=${_logdetailuser}`, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, '')),
+  getUserProfileImageHistoryList: () => axios.get('/api/user/profile/image/history', CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, 'error')),
   postLogin: (email, password, devData) => axios.post('/api/auth/login', { email, password, device: devData.device, devdata: LocSer.serialize(devData.data) }).catch(err => axiosResErrorNotify(err, 'info')),
   postLogout: () => axios.post('/api/auth/logout', {}, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, '')),
   postLogoutRevokes: () => axios.post('/api/auth/logout', { _action: 'revoke' }, CredMng.axiosHeaderToken()).catch(err => axiosResErrorNotify(err, '')),

@@ -16,7 +16,11 @@
         enctype="multipart/form-data"
         @submit.prevent="uploadImageProfile"
       >
-        <label for="setting-biodata-image-import">Image Profile</label>
+        <label>Image Profile</label>
+        <button
+          :class="`btn btn-link btn-sm text-bold ${btnImgHistory().color}`"
+          @click.prevent.stop="btnImgHistoryFunc"
+        >{{btnImgHistory().text}} Image History</button>
         <div class="custom-file">
           <input
             type="file"
@@ -55,6 +59,44 @@
         :src="`${this.$AppHelper.apiEndpoint()}${this.imageUploadResult}`"
         alt="user-profile-image"
       />
+      <div
+        id="profile-image-history"
+        style="display:none"
+      >
+        <div v-if="imageProfileHistory.length">
+          <div class="row">
+            <div
+              class="col-12 col-sm-6 col-md-4 col-lg-3"
+              v-for="(imgHist, idx) in imageProfileHistory"
+              :key="idx"
+            >
+              <div class="hvr-grow-shadow">
+                <div
+                  class="card isImgChoosed"
+                  :id="`imgHistoryID-${idx}`"
+                >
+                  <div class="card-body">
+                    <img
+                      class="imgHistory"
+                      :srcset="`${asset_img}${imgHist.image_origin_url}`"
+                      alt="History Image"
+                      @click="historyImageChoosed(idx)"
+                    >
+                    <button class="btn btn-outline-danger btn-sm btn-block mt-1 text-bold"><i class="fas fa-trash"></i>&ensp;Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          <div class="card">
+            <div class="card-body">
+              <p class="text-danger text-center mx-0 my-0">You don't have image history yet.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <button
       class="btn btn-primary float-right text-bold"
@@ -85,8 +127,8 @@ export default {
           .then(res => {
             if (res.data.status === 'success') {
               this.imageUploadOrigin = res.data.response_data[0].origin_name
-              this.imageUploadForm = res.data.response_data[0].img_name
-              this.imageUploadResult = res.data.response_data[0].img_name
+              this.imageUploadForm = res.data.response_data[0].img_url
+              this.imageUploadResult = res.data.response_data[0].img_url
             } else {
               this.imageUploadOrigin = ''
               this.imageUploadForm = ''
@@ -144,6 +186,31 @@ export default {
         }
       })
     },
+    getUserProfileImageHistoryList () {
+      this.$axios.getCookies().then(async () => {
+        await this.$axios.getUserProfileImageHistoryList().then(res => {
+          this.imageProfileHistory = res.data.response_data
+        })
+      })
+    },
+    btnImgHistoryFunc () {
+      const boolTo = this.btnImgHistory().bool
+      if (boolTo) {
+        this.getUserProfileImageHistoryList()
+        this.$('#profile-image-history').show(500)
+      } else {
+        this.$('#profile-image-history').hide(500)
+      }
+      this.btnImgHistoryBool = boolTo
+    },
+    historyImageChoosed (idx) {
+      const classUsed = 'border border-primary rounded'
+      this.$('.isImgChoosed').removeClass(classUsed)
+      this.$(`#imgHistoryID-${idx}`).addClass(classUsed)
+      this.imageUploadOrigin = this.imageProfileHistory[idx].image_origin_name
+      this.imageUploadForm = this.imageProfileHistory[idx].image_origin_url
+    },
+    // above is function, below is helper
     responseFailed (data) {
       var errorMsg = ''
       if (data.name) {
@@ -176,16 +243,54 @@ export default {
         ? Swal.fire('Sorry', this.$axiosRes.catchError(err), 'error')
         : this.$Notify.notifyError(this.$axiosRes.catchError(err))
       console.log(err)
+    },
+    btnImgHistory () {
+      if (this.btnImgHistoryBool) {
+        return { bool: false, color: 'text-danger', text: 'Close' }
+      } else {
+        return { bool: true, color: 'text-primary', text: 'Open' }
+      }
     }
   },
   data () {
     return {
       appTimeNow: new Date().getTime(),
+      asset_img: this.$AppHelper.apiEndpoint(),
       fullNameBiodata: this.$store.state.AuthStore.thisBiodata.name,
       imageUploadOrigin: '',
       imageUploadForm: '',
-      imageUploadResult: ''
+      imageUploadResult: '',
+      btnImgHistoryBool: false,
+      imageProfileHistory: []
     }
   }
 }
 </script>
+
+<style lang="css" scoped>
+/* Grow Shadow */
+.hvr-grow-shadow {
+  /* display: inline-block; */
+  vertical-align: middle;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: box-shadow, transform;
+  transition-property: box-shadow, transform;
+}
+.hvr-grow-shadow:hover,
+.hvr-grow-shadow:focus,
+.hvr-grow-shadow:active {
+  box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
+.imgHistory {
+  max-width: 100%;
+  max-height: 100%;
+  display: block; /* remove extra space below image */
+}
+/*  border border-success rounded */
+</style>
