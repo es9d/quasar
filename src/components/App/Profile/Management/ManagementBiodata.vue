@@ -67,7 +67,7 @@
         <div v-if="imageProfileHistory.length">
           <div class="row">
             <div
-              class="col-12 col-sm-6 col-md-4 col-lg-3"
+              class="col-6 col-sm-4 col-lg-3 mt-1 mt-lg-0"
               v-for="(imgHist, idx) in imageProfileHistory"
               :key="idx"
             >
@@ -76,18 +76,18 @@
                   class="card isImgChoosed"
                   :id="`imgHistoryID-${idx}`"
                 >
-                  <div class="card-body">
+                  <div class="">
                     <img
-                      class="imgHistory ml-auto mr-auto"
+                      class="imgHistory ml-auto mr-auto rounded-top"
                       :srcset="`${asset_img}${imgHist.image_origin_url}`"
                       alt="History Image"
                       @click="historyImageChoosed(idx)"
                     >
-                    <button
-                      class="btn btn-outline-danger btn-sm btn-block mt-1 text-bold"
-                      @click="historyImageDelete(idx)"
-                    ><i class="fas fa-trash"></i>&ensp;Delete</button>
                   </div>
+                  <button
+                    class="btn btn-link btn-sm btn-block mt-1 text-bold text-danger"
+                    @click="historyImageDelete(idx)"
+                  ><i class="far fa-times-circle fa-lg"></i></button>
                 </div>
               </div>
             </div>
@@ -177,6 +177,7 @@ export default {
                     this.imageUploadForm = ''
                     this.imageUploadResult = ''
                     this.getBiodata()
+                    return this.btnImgHistoryBool ? this.btnImgHistoryFunc() : ''
                   } else {
                     await Swal.fire(
                       'Opps!!',
@@ -201,10 +202,10 @@ export default {
         })
       })
     },
-    btnImgHistoryFunc () {
+    async btnImgHistoryFunc () {
       const boolTo = this.btnImgHistory().bool
       if (boolTo) {
-        this.getUserProfileImageHistoryList()
+        await this.getUserProfileImageHistoryList()
         this.$('#profile-image-history').show(500)
       } else {
         this.$('#profile-image-history').hide(500)
