@@ -45,6 +45,29 @@
             </tr>
           </tbody>
         </table>
+        <div class="btn-group float-right mt-1">
+          <button
+            type="button"
+            class="btn btn-default"
+            @click="gotoPage('first')"
+          >First</button>
+          <button
+            type="button"
+            class="btn btn-default"
+            @click="gotoPage('prev')"
+          >Previous</button>
+          <button class="btn btn-default">{{currentPage}}</button>
+          <button
+            type="button"
+            class="btn btn-default"
+            @click="gotoPage('next')"
+          >Next</button>
+          <button
+            type="button"
+            class="btn btn-default"
+            @click="gotoPage('last')"
+          >Last</button>
+        </div>
       </div>
     </div>
   </div>
@@ -57,7 +80,7 @@ export default {
     this.getResAdminMenuUsersList()
   },
   updated () {
-    this.$(() => { this.$.fn.dataTable.ext.errMode = 'none'; this.$('#list-user-table').DataTable({ autoWidth: false, responsive: true }) })
+    this.$(() => { this.$.fn.dataTable.ext.errMode = 'none'; this.$(`#${this.dataTableName}`).DataTable({ autoWidth: false, responsive: true, lengthChange: false, paging: false, info: false }) })
   },
   methods: {
     getResAdminMenuUsersList () {
@@ -65,8 +88,36 @@ export default {
         this.$axios.getResAdminMenuUsersList().then((res) => {
           const data = res.data.response_data
           this.listOfUsers = data.users.list || []
+          this.pageQuery = data.users.query || []
         })
       })
+    },
+    getAnotherDataPaginates (url) {
+      this.$axios.getCookies().then(() => {
+        this.$axios.getResAdminMenuDynamicUrl(url).then((res) => {
+          const data = res.data.response_data
+          this.listOfUsers = data.users.list || []
+          this.pageQuery = data.users.query || []
+        })
+      })
+    },
+    urlManipulator (url, param) {
+      const urlParams = new URLSearchParams(url)
+      return urlParams.get(param) || 1
+    },
+    gotoPage (goto) {
+      if ((goto === 'next') && this.pageQuery.next_page) {
+        this.getAnotherDataPaginates(this.pageQuery.next_page); this.currentPage = this.urlManipulator(this.pageQuery.next_page, 'page')
+      }
+      if ((goto === 'prev') && this.pageQuery.prev_page) {
+        this.getAnotherDataPaginates(this.pageQuery.prev_page); this.currentPage = this.urlManipulator(this.pageQuery.prev_page, 'page')
+      }
+      if ((goto === 'first') && this.pageQuery.first_page) {
+        this.getAnotherDataPaginates(this.pageQuery.first_page); this.currentPage = this.urlManipulator(this.pageQuery.first_page, 'page')
+      }
+      if ((goto === 'last') && this.pageQuery.last_page) {
+        this.getAnotherDataPaginates(this.pageQuery.last_page); this.currentPage = this.urlManipulator(this.pageQuery.last_page, 'page')
+      }
     },
     userActiveConvert (status) {
       if (status === 'Suspend') {
@@ -81,7 +132,10 @@ export default {
   data () {
     return {
       asset_img: this.$AppHelper.apiEndpoint(),
-      listOfUsers: []
+      dataTableName: 'list-user-table',
+      listOfUsers: [],
+      pageQuery: [],
+      currentPage: 1
     }
   }
 }
