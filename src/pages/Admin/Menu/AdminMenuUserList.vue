@@ -2,6 +2,23 @@
   <div id="users-list">
     <div class="card">
       <div class="card-body table-responsive">
+        <div class="row mb-1">
+          <div class="offset-0 col-12 offset-sm-5 col-sm-7 offset-md-7 col-md-5 offset-lg-8 col-lg-4 input-group">
+            <input
+              type="text"
+              class="form-control"
+              :id="dataTableName+'_search'"
+              placeholder="Search Name"
+            >
+            <span class="input-group-append">
+              <button
+                type="button"
+                class="btn btn-info"
+                @click="searchUserName"
+              >Search</button>
+            </span>
+          </div>
+        </div>
         <table
           id="list-user-table"
           class="table table-borderless table-hover"
@@ -80,7 +97,7 @@ export default {
     this.getResAdminMenuUsersList()
   },
   updated () {
-    this.$(() => { this.$.fn.dataTable.ext.errMode = 'none'; this.$(`#${this.dataTableName}`).DataTable({ autoWidth: false, responsive: true, lengthChange: false, paging: false, info: false }) })
+    this.$(() => { this.$.fn.dataTable.ext.errMode = 'none'; this.$(`#${this.dataTableName}`).DataTable({ autoWidth: false, responsive: true, lengthChange: false, paging: false, info: false, searching: false }) })
   },
   methods: {
     getResAdminMenuUsersList () {
@@ -95,6 +112,16 @@ export default {
     getAnotherDataPaginates (url) {
       this.$axios.getCookies().then(() => {
         this.$axios.getResAdminMenuDynamicUrl(url).then((res) => {
+          const data = res.data.response_data
+          this.listOfUsers = data.users.list || []
+          this.pageQuery = data.users.query || []
+        })
+      })
+    },
+    searchUserName () {
+      const getName = this.$(`#${this.dataTableName}_search`).val()
+      this.$axios.getCookies().then(() => {
+        this.$axios.getResAdminMenuSearchUserByName(getName).then((res) => {
           const data = res.data.response_data
           this.listOfUsers = data.users.list || []
           this.pageQuery = data.users.query || []
