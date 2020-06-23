@@ -8,6 +8,7 @@ import Notify from 'src/third-party/helper/app-notify.min'
 axios.defaults.withCredentials = true
 axios.defaults.baseURL = AppHelper.apiEndpoint()
 axios.defaults.headers = { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+axios.defaults.timeout = 10000
 
 const RestServices = {
   getCookies: () => axios.get('/sanctum/csrf-cookie').catch(err => axiosResErrorNotify(err, 'error')),

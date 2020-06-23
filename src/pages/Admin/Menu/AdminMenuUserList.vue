@@ -145,11 +145,15 @@ export default {
       if (getName) {
         this.$axios.getCookies().then(() => {
           this.$axios.getResAdminMenuSearchUserByName(getName).then((res) => {
-            const data = res.data.response_data
-            this.countOfData = data.users.count
-            this.listOfUsers = data.users.list || []
-            this.pageQuery = data.users.query || []
-            this.currentPage = this.getPageFromUrlPaginate(this.pageQuery.first_page, 'page')
+            if (res.data.status === 'success') {
+              const data = res.data.response_data
+              this.countOfData = data.users.count
+              this.listOfUsers = data.users.list || []
+              this.pageQuery = data.users.query || []
+              this.currentPage = this.getPageFromUrlPaginate(this.pageQuery.first_page, 'page')
+            } else {
+              this.$Notify.notifyResponseArray(res.data.message, 'info')
+            }
           })
         })
       } else {
