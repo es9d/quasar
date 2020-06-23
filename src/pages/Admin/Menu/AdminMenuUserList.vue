@@ -3,24 +3,26 @@
     <div class="card">
       <div class="card-body table-responsive">
         <div class="row mb-1">
-          <div class="offset-0 col-12 offset-sm-5 col-sm-7 offset-md-7 col-md-5 offset-lg-8 col-lg-4 input-group">
+          <div class="input-group col-12 offset-md-7 col-md-5">
             <input
               type="text"
               class="form-control"
               :id="dataTableName+'_search'"
               placeholder="Search Name"
+              @keyup.enter="goToSearchName"
             >
             <span class="input-group-append">
               <button
                 type="button"
-                class="btn btn-info"
+                class="btn btn-outline-info"
+                id="btn-search-user"
                 @click="searchUserName"
               >Search</button>
             </span>
           </div>
         </div>
         <table
-          id="list-user-table"
+          :id="dataTableName"
           class="table table-borderless table-hover"
         >
           <thead>
@@ -60,28 +62,41 @@
               <td class="text-center">{{user.registered}}</td>
               <td class="text-center">{{user.last_login}}</td>
             </tr>
+            <tr v-if="!listOfUsers.length">
+              <td
+                colspan="4"
+                class="text-center"
+              >No data available in table</td>
+            </tr>
           </tbody>
         </table>
-        <div class="btn-group float-right mt-1">
+        <p
+          v-if="countOfData != 0"
+          class="text-muted text-sm"
+        >Showing {{pageQuery.data_from}} to {{pageQuery.data_to}} of {{countOfData}} entries</p>
+        <div
+          class="btn-group pagination mt-1"
+          v-if="listOfUsers.length"
+        >
           <button
             type="button"
-            class="btn btn-default"
+            class="btn btn-outline-info"
             @click="gotoPage('first')"
           >First</button>
           <button
             type="button"
-            class="btn btn-default"
+            class="btn btn-outline-info"
             @click="gotoPage('prev')"
           >Previous</button>
-          <button class="btn btn-default">{{currentPage}}</button>
+          <span class="btn btn-outline-info">{{currentPage}}</span>
           <button
             type="button"
-            class="btn btn-default"
+            class="btn btn-outline-info"
             @click="gotoPage('next')"
           >Next</button>
           <button
             type="button"
-            class="btn btn-default"
+            class="btn btn-outline-info"
             @click="gotoPage('last')"
           >Last</button>
         </div>
@@ -104,47 +119,52 @@ export default {
       this.$axios.getCookies().then(() => {
         this.$axios.getResAdminMenuUsersList().then((res) => {
           const data = res.data.response_data
+          this.countOfData = data.users.count
           this.listOfUsers = data.users.list || []
           this.pageQuery = data.users.query || []
+          this.currentPage = this.getPageFromUrlPaginate(this.pageQuery.first_page, 'page')
         })
       })
     },
     getAnotherDataPaginates (url) {
       this.$axios.getCookies().then(() => {
         this.$axios.getResAdminMenuDynamicUrl(url).then((res) => {
-          const data = res.data.response_data
-          this.listOfUsers = data.users.list || []
-          this.pageQuery = data.users.query || []
+          if (res.data.status === 'success') {
+            const data = res.data.response_data
+            this.listOfUsers = data.users.list || []
+            this.pageQuery = data.users.query || []
+            this.currentPage = this.getPageFromUrlPaginate(url, 'page')
+          } else {
+            this.$Notify.notifyInfo(res.data.message)
+          }
         })
       })
     },
     searchUserName () {
       const getName = this.$(`#${this.dataTableName}_search`).val()
-      this.$axios.getCookies().then(() => {
-        this.$axios.getResAdminMenuSearchUserByName(getName).then((res) => {
-          const data = res.data.response_data
-          this.listOfUsers = data.users.list || []
-          this.pageQuery = data.users.query || []
+      if (getName) {
+        this.$axios.getCookies().then(() => {
+          this.$axios.getResAdminMenuSearchUserByName(getName).then((res) => {
+            const data = res.data.response_data
+            this.countOfData = data.users.count
+            this.listOfUsers = data.users.list || []
+            this.pageQuery = data.users.query || []
+            this.currentPage = this.getPageFromUrlPaginate(this.pageQuery.first_page, 'page')
+          })
         })
-      })
+      } else {
+        this.getResAdminMenuUsersList()
+      }
     },
-    urlManipulator (url, param) {
+    getPageFromUrlPaginate (url, param) {
       const urlParams = new URLSearchParams(url)
       return urlParams.get(param) || 1
     },
     gotoPage (goto) {
-      if ((goto === 'next') && this.pageQuery.next_page) {
-        this.getAnotherDataPaginates(this.pageQuery.next_page); this.currentPage = this.urlManipulator(this.pageQuery.next_page, 'page')
-      }
-      if ((goto === 'prev') && this.pageQuery.prev_page) {
-        this.getAnotherDataPaginates(this.pageQuery.prev_page); this.currentPage = this.urlManipulator(this.pageQuery.prev_page, 'page')
-      }
-      if ((goto === 'first') && this.pageQuery.first_page) {
-        this.getAnotherDataPaginates(this.pageQuery.first_page); this.currentPage = this.urlManipulator(this.pageQuery.first_page, 'page')
-      }
-      if ((goto === 'last') && this.pageQuery.last_page) {
-        this.getAnotherDataPaginates(this.pageQuery.last_page); this.currentPage = this.urlManipulator(this.pageQuery.last_page, 'page')
-      }
+      if ((goto === 'next') && this.pageQuery.next_page) this.getAnotherDataPaginates(this.pageQuery.next_page)
+      if ((goto === 'prev') && this.pageQuery.prev_page) this.getAnotherDataPaginates(this.pageQuery.prev_page)
+      if ((goto === 'first') && this.pageQuery.first_page) this.getAnotherDataPaginates(this.pageQuery.first_page)
+      if ((goto === 'last') && this.pageQuery.last_page) this.getAnotherDataPaginates(this.pageQuery.last_page)
     },
     userActiveConvert (status) {
       if (status === 'Suspend') {
@@ -154,6 +174,9 @@ export default {
       } else {
         return `<font class="text-bold text-success"><i class="far fa-check-circle"></i>&ensp;${status}</font>`
       }
+    },
+    goToSearchName () {
+      this.$(() => this.$('#btn-search-user').click())
     }
   },
   data () {
@@ -162,8 +185,22 @@ export default {
       dataTableName: 'list-user-table',
       listOfUsers: [],
       pageQuery: [],
-      currentPage: 1
+      currentPage: 1,
+      countOfData: 0
     }
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+.btn-group-wrap {
+  text-align: center;
+}
+
+div.btn-group {
+  margin: 0 auto;
+  text-align: right;
+  width: inherit;
+  display: inline-block;
+}
+</style>
