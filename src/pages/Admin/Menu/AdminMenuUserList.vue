@@ -70,44 +70,23 @@
             </tr>
           </tbody>
         </table>
-        <p
-          v-if="countOfData != 0"
-          class="text-muted text-sm"
-        >Showing {{pageQuery.data_from}} to {{pageQuery.data_to}} of {{countOfData}} entries</p>
-        <div
-          class="btn-group pagination mt-1"
-          v-if="listOfUsers.length"
-        >
-          <button
-            type="button"
-            class="btn btn-outline-info"
-            @click="gotoPage('first')"
-          >First</button>
-          <button
-            type="button"
-            class="btn btn-outline-info"
-            @click="gotoPage('prev')"
-          >Previous</button>
-          <span class="btn btn-outline-info">{{currentPage}}</span>
-          <button
-            type="button"
-            class="btn btn-outline-info"
-            @click="gotoPage('next')"
-          >Next</button>
-          <button
-            type="button"
-            class="btn btn-outline-info"
-            @click="gotoPage('last')"
-          >Last</button>
-        </div>
+        <ResourcePaginate
+          :dataCount="countOfData"
+          :query="pageQuery"
+          :mainPage="currentPage"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import UrlHelper from 'src/third-party/helper/url-helper.min'
 export default {
   name: 'AdminMenuUserList',
+  components: {
+    ResourcePaginate: () => import('pages/Admin/Menu/Component/ResourcePaginate')
+  },
   created () {
     this.getResAdminMenuUsersList()
   },
@@ -122,21 +101,7 @@ export default {
           this.countOfData = data.users.count
           this.listOfUsers = data.users.list || []
           this.pageQuery = data.users.query || []
-          this.currentPage = this.getPageFromUrlPaginate(this.pageQuery.first_page, 'page')
-        })
-      })
-    },
-    getAnotherDataPaginates (url) {
-      this.$axios.getCookies().then(() => {
-        this.$axios.getResAdminMenuDynamicUrl(url).then((res) => {
-          if (res.data.status === 'success') {
-            const data = res.data.response_data
-            this.listOfUsers = data.users.list || []
-            this.pageQuery = data.users.query || []
-            this.currentPage = this.getPageFromUrlPaginate(url, 'page')
-          } else {
-            this.$Notify.notifyInfo(res.data.message)
-          }
+          this.currentPage = UrlHelper.getUrlParamValue(this.pageQuery.first_page, 'page')
         })
       })
     },
@@ -150,7 +115,7 @@ export default {
               this.countOfData = data.users.count
               this.listOfUsers = data.users.list || []
               this.pageQuery = data.users.query || []
-              this.currentPage = this.getPageFromUrlPaginate(this.pageQuery.first_page, 'page')
+              this.currentPage = UrlHelper.getUrlParamValue(this.pageQuery.first_page, 'page')
             } else {
               this.$Notify.notifyResponseArray(res.data.message, 'info')
             }
@@ -159,16 +124,6 @@ export default {
       } else {
         this.getResAdminMenuUsersList()
       }
-    },
-    getPageFromUrlPaginate (url, param) {
-      const urlParams = new URLSearchParams(url)
-      return urlParams.get(param) || 1
-    },
-    gotoPage (goto) {
-      if ((goto === 'next') && this.pageQuery.next_page) this.getAnotherDataPaginates(this.pageQuery.next_page)
-      if ((goto === 'prev') && this.pageQuery.prev_page) this.getAnotherDataPaginates(this.pageQuery.prev_page)
-      if ((goto === 'first') && this.pageQuery.first_page) this.getAnotherDataPaginates(this.pageQuery.first_page)
-      if ((goto === 'last') && this.pageQuery.last_page) this.getAnotherDataPaginates(this.pageQuery.last_page)
     },
     userActiveConvert (status) {
       if (status === 'Suspend') {
@@ -195,16 +150,3 @@ export default {
   }
 }
 </script>
-
-<style lang="stylus" scoped>
-.btn-group-wrap {
-  text-align: center;
-}
-
-div.btn-group {
-  margin: 0 auto;
-  text-align: right;
-  width: inherit;
-  display: inline-block;
-}
-</style>
