@@ -2,25 +2,7 @@
   <div id="users-list">
     <div class="card">
       <div class="card-body table-responsive">
-        <div class="row mb-1">
-          <div class="input-group col-12 offset-md-7 col-md-5">
-            <input
-              type="text"
-              class="form-control"
-              :id="dataTableName+'_search'"
-              placeholder="Search Name"
-              @keyup.enter="goToSearchName"
-            >
-            <span class="input-group-append">
-              <button
-                type="button"
-                class="btn btn-outline-info"
-                id="btn-search-user"
-                @click="searchUserName"
-              >Search</button>
-            </span>
-          </div>
-        </div>
+        <ResourceSearch />
         <table
           :id="dataTableName"
           class="table table-borderless table-hover"
@@ -85,6 +67,7 @@ import UrlHelper from 'src/third-party/helper/url-helper.min'
 export default {
   name: 'AdminMenuUserList',
   components: {
+    ResourceSearch: () => import('pages/Admin/Menu/Component/ResourceSearch'),
     ResourcePaginate: () => import('pages/Admin/Menu/Component/ResourcePaginate')
   },
   created () {
@@ -105,26 +88,6 @@ export default {
         })
       })
     },
-    searchUserName () {
-      const getName = this.$(`#${this.dataTableName}_search`).val()
-      if (getName) {
-        this.$axios.getCookies().then(() => {
-          this.$axios.getResAdminMenuSearchUserByName(getName).then((res) => {
-            if (res.data.status === 'success') {
-              const data = res.data.response_data
-              this.countOfData = data.users.count
-              this.listOfUsers = data.users.list || []
-              this.pageQuery = data.users.query || []
-              this.currentPage = UrlHelper.getUrlParamValue(this.pageQuery.first_page, 'page')
-            } else {
-              this.$Notify.notifyResponseArray(res.data.message, 'info')
-            }
-          })
-        })
-      } else {
-        this.getResAdminMenuUsersList()
-      }
-    },
     userActiveConvert (status) {
       if (status === 'Suspend') {
         return `<font class="text-bold text-warning"><i class="fas fa-exclamation-circle"></i>&ensp;${status}</font>`
@@ -133,9 +96,6 @@ export default {
       } else {
         return `<font class="text-bold text-success"><i class="far fa-check-circle"></i>&ensp;${status}</font>`
       }
-    },
-    goToSearchName () {
-      this.$(() => this.$('#btn-search-user').click())
     }
   },
   data () {
