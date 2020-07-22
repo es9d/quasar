@@ -12,30 +12,30 @@
     >
       <button
         type="button"
-        class="btn btn-sm btn-outline-info"
+        class="btn btn-sm btn-outline-primary"
         @click="gotoPage('first')"
-      ><i class="fas fa-fast-backward"></i></button>
+      ><i class="fas fa-angle-double-left"></i></button>
       <button
         type="button"
-        class="btn btn-sm btn-outline-info"
+        class="btn btn-sm btn-outline-primary"
         @click="gotoPage('prev')"
-      ><i class="fas fa-step-backward"></i></button>
+      ><i class="fas fa-chevron-left"></i></button>
       <span
         v-for="(page, idx) in getPaginate()"
         :key="idx"
-        :class="`btn btn-sm ${page == mainPage ? `btn-info` : `btn-outline-info`}`"
+        :class="`btn btn-sm ${page == mainPage ? `btn-primary` : `btn-outline-primary`}`"
         @click="gotoPage(page)"
       >{{page}}</span>
       <button
         type="button"
-        class="btn btn-sm btn-outline-info"
+        class="btn btn-sm btn-outline-primary"
         @click="gotoPage('next')"
-      ><i class="fas fa-step-forward"></i></button>
+      ><i class="fas fa-chevron-right"></i></button>
       <button
         type="button"
-        class="btn btn-sm btn-outline-info"
+        class="btn btn-sm btn-outline-primary"
         @click="gotoPage('last')"
-      ><i class="fas fa-fast-forward"></i></button>
+      ><i class="fas fa-angle-double-right"></i></button>
     </div>
   </div>
 </template>
@@ -56,12 +56,14 @@ export default {
     },
     getAnotherDataPaginates (url) {
       this.$axios.getCookies().then(() => {
+        this.$parent.updateTableDataInfo('reboot')
         this.$axios.getResAdminMenuDynamicUrl(url).then((res) => {
           if (res.data.status === 'success') {
             const data = res.data.response_data
             this.$parent.listOfUsers = data.users.list || []
             this.$parent.pageQuery = data.users.query || []
             this.$parent.currentPage = UrlHelper.getUrlParamValue(url, 'page')
+            this.$parent.updateTableDataInfo()
           } else {
             this.$Notify.notifyInfo(res.data.message)
           }

@@ -48,7 +48,11 @@
               <td
                 colspan="4"
                 class="text-center"
-              >No data available in table</td>
+                :id="`${dataTableName}_value`"
+              ></td>
+              <td hidden></td>
+              <td hidden></td>
+              <td hidden></td>
             </tr>
           </tbody>
         </table>
@@ -71,20 +75,23 @@ export default {
     ResourcePaginate: () => import('pages/Admin/Menu/Component/ResourcePaginate')
   },
   created () {
+    this.updateTableDataInfo('reboot')
     this.getResAdminMenuUsersList()
   },
   updated () {
-    this.$(() => { this.$.fn.dataTable.ext.errMode = 'none'; this.$(`#${this.dataTableName}`).DataTable({ autoWidth: false, responsive: true, lengthChange: false, paging: false, info: false, searching: false }) })
+    this.$(() => { this.$.fn.dataTable.ext.errMode = 'none'; this.$(`#${this.dataTableName}`).DataTable({ autoWidth: false, responsive: true, lengthChange: false, paging: false, info: false, searching: false, ordering: false }) })
   },
   methods: {
     getResAdminMenuUsersList () {
       this.$axios.getCookies().then(() => {
+        this.updateTableDataInfo('reboot')
         this.$axios.getResAdminMenuUsersList().then((res) => {
           const data = res.data.response_data
           this.countOfData = data.users.count
           this.listOfUsers = data.users.list || []
           this.pageQuery = data.users.query || []
           this.currentPage = UrlHelper.getUrlParamValue(this.pageQuery.first_page, 'page')
+          this.updateTableDataInfo()
         })
       })
     },
@@ -95,6 +102,16 @@ export default {
         return `<font class="text-bold text-danger"><i class="far fa-times-circle"></i>&ensp;${status}</font>`
       } else {
         return `<font class="text-bold text-success"><i class="far fa-check-circle"></i>&ensp;${status}</font>`
+      }
+    },
+    updateTableDataInfo (command = '') {
+      if (command === 'reboot') {
+        this.listOfUsers = []
+        this.$(() => this.$(`#${this.dataTableName}_value`).html('<font class="text-primary">Please wait...&ensp;<i class="fas fa-spinner fa-pulse"></i></font>'))
+      } else {
+        if (this.countOfData < 1) {
+          this.$(() => this.$(`#${this.dataTableName}_value`).html('<font class="text-danger">No data available in table</font>'))
+        }
       }
     }
   },

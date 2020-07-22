@@ -1,9 +1,9 @@
 <template>
   <div class="row mb-1">
-    <div class="input-group col-12 offset-md-7 col-md-5">
+    <div class="input-group input-group-sm col-12 offset-md-7 col-md-5">
       <input
         type="text"
-        class="form-control"
+        class="form-control border-primary"
         id="searchUser"
         placeholder="Search Name"
         @keyup.enter="searchUserName"
@@ -11,10 +11,10 @@
       <span class="input-group-append">
         <button
           type="button"
-          class="btn btn-outline-info"
+          class="btn btn-primary text-bold"
           id="btn-search-user"
           @click="searchUserName"
-        >Search</button>
+        ><i class="fas fa-search"></i></button>
       </span>
     </div>
   </div>
@@ -29,6 +29,7 @@ export default {
       const getName = this.$('#searchUser').val()
       if (getName) {
         this.$axios.getCookies().then(() => {
+          this.$parent.updateTableDataInfo('reboot')
           this.$axios.getResAdminMenuSearchUserByName(getName).then((res) => {
             if (res.data.status === 'success') {
               const data = res.data.response_data
@@ -38,7 +39,9 @@ export default {
               this.$parent.currentPage = UrlHelper.getUrlParamValue(this.$parent.pageQuery.first_page, 'page')
             } else {
               this.$Notify.notifyResponseArray(res.data.message, 'info')
+              this.$parent.countOfData = 0
             }
+            this.$parent.updateTableDataInfo()
           })
         })
       } else {
