@@ -1,5 +1,5 @@
 <template>
-  <div id="user-delete">
+  <div id="user-delete-forever">
     <p class="text-bold text-center">--- User Delete Forever ---</p>
     <div class="border border-danger rounded">
       <div class="mx-3 my-4">

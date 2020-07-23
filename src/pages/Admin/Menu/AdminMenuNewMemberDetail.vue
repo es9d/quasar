@@ -24,7 +24,12 @@
             >
               <UserRegisterConfirm
                 :defaultReturn="routeName"
-                :registerAccess="userData.access"
+                :registerAccess="userRequest.access"
+              />
+              <hr />
+              <MailPreview
+                openMail="newregister"
+                :accessCode="this.userRequest.access"
               />
               <hr>
               <UserDelete :defaultReturn="routeName" />
@@ -42,7 +47,8 @@ export default {
   components: {
     UserProperty: () => import('pages/Admin/Menu/Component/UserProperty'),
     UserRegisterConfirm: () => import('pages/Admin/Menu/Component/UserRegisterConfirm'),
-    UserDelete: () => import('pages/Admin/Menu/Component/UserDelete')
+    UserDelete: () => import('pages/Admin/Menu/Component/UserDelete'),
+    MailPreview: () => import('src/pages/Admin/Menu/Component/MailPreview')
   },
   created () {
     this.getResAdminMenuNewMemberDetail()
@@ -54,6 +60,7 @@ export default {
           const data = res.data.response_data
           if (data.user.length === 0) return this.$router.push({ name: this.routeName })
           this.userData = data.user || null
+          this.userRequest = { access: data.user.access, request_at: data.user.request_at } || null
         })
       })
     }
@@ -62,7 +69,8 @@ export default {
     return {
       routeName: 'AdminMenuNewMemberList',
       userCode: this.$route.params.code,
-      userData: { profile_img: this.$AppHelper.defaultProfileImg() }
+      userData: { profile_img: this.$AppHelper.defaultProfileImg() },
+      userRequest: {}
     }
   }
 }

@@ -26,6 +26,11 @@
                 :requestAccess="userRequest"
                 :defaultReturn="routeName"
               />
+              <hr />
+              <MailPreview
+                openMail="lostpassword"
+                :accessCode="userRequest.access"
+              />
             </div>
           </div>
         </div>
@@ -39,7 +44,8 @@ export default {
   name: 'AdminMenuLostPasswordDetail',
   components: {
     UserProperty: () => import('pages/Admin/Menu/Component/UserProperty'),
-    UserLostPasswordReqMng: () => import('pages/Admin/Menu/Component/UserLostPasswordReqMng')
+    UserLostPasswordReqMng: () => import('pages/Admin/Menu/Component/UserLostPasswordReqMng'),
+    MailPreview: () => import('src/pages/Admin/Menu/Component/MailPreview')
   },
   created () {
     this.getResAdminMenuLostPasswordDetail()
