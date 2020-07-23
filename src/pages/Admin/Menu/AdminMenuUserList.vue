@@ -2,7 +2,7 @@
   <div id="users-list">
     <div class="card">
       <div class="card-body table-responsive">
-        <ResourceSearch />
+        <ResourceSearch condition="" />
         <table
           :id="dataTableName"
           class="table table-borderless table-hover"

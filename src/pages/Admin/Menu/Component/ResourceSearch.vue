@@ -1,5 +1,5 @@
 <template>
-  <div class="row mb-1">
+  <div class="row">
     <div class="input-group input-group-sm col-12 offset-md-7 col-md-5">
       <input
         type="text"
@@ -24,13 +24,16 @@
 import UrlHelper from 'src/third-party/helper/url-helper.min'
 export default {
   name: 'ResourceSearch',
+  props: {
+    condition: String
+  },
   methods: {
     searchUserName () {
       const getName = this.$('#searchUser').val()
       if (getName) {
         this.$axios.getCookies().then(() => {
           this.$parent.updateTableDataInfo('reboot')
-          this.$axios.getResAdminMenuSearchUserByName(getName).then((res) => {
+          this.$axios.getResAdminMenuSearchUserByName(getName, this.condition).then((res) => {
             if (res.data.status === 'success') {
               const data = res.data.response_data
               this.$parent.countOfData = data.users.count
