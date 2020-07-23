@@ -48,7 +48,7 @@ export default {
           })
         })
       } else {
-        this.$parent.getResAdminMenuUsersList()
+        this.$parent.getResourcesData()
       }
     }
   }

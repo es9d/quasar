@@ -2,6 +2,7 @@
   <div id="lost-password-list">
     <div class="card">
       <div class="card-body table-responsive">
+        <ResourceSearch condition="lostpassword" />
         <table
           id="list-user-table"
           class="table table-borderless table-hover"
@@ -16,7 +17,7 @@
           </thead>
           <tbody>
             <tr
-              v-for="(user, idx) in listOfLostPassword"
+              v-for="(user, idx) in listOfUsers"
               :key="idx"
             >
               <td>
@@ -43,28 +44,55 @@
               <td class="text-center">{{user.last_login}}</td>
               <td class="text-center">{{user.request_at}}</td>
             </tr>
+            <tr v-if="!listOfUsers.length">
+              <td
+                colspan="4"
+                class="text-center"
+                :id="`${dataTableName}_value`"
+              ></td>
+              <td hidden></td>
+              <td hidden></td>
+              <td hidden></td>
+            </tr>
           </tbody>
         </table>
+        <ResourcePaginate
+          paramName="lostPassword"
+          :dataCount="countOfData"
+          :query="pageQuery"
+          :mainPage="currentPage"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import UrlHelper from 'src/third-party/helper/url-helper.min'
 export default {
   name: 'AdminMenuLostPasswordList',
+  components: {
+    ResourceSearch: () => import('pages/Admin/Menu/Component/ResourceSearch'),
+    ResourcePaginate: () => import('pages/Admin/Menu/Component/ResourcePaginate')
+  },
   created () {
-    this.getResAdminMenuLostPasswordList()
+    this.updateTableDataInfo('reboot')
+    this.getResourcesData()
   },
   updated () {
-    this.$(() => { this.$.fn.dataTable.ext.errMode = 'none'; this.$('#list-user-table').DataTable({ autoWidth: false, responsive: true }) })
+    this.$(() => { this.$.fn.dataTable.ext.errMode = 'none'; this.$(`#${this.dataTableName}`).DataTable({ autoWidth: false, responsive: true, lengthChange: false, paging: false, info: false, searching: false, ordering: false }) })
   },
   methods: {
-    getResAdminMenuLostPasswordList () {
+    getResourcesData () {
       this.$axios.getCookies().then(() => {
+        this.updateTableDataInfo('reboot')
         this.$axios.getResAdminMenuLostPasswordList().then((res) => {
           const data = res.data.response_data
-          this.listOfLostPassword = data.lostPassword.list || []
+          this.countOfData = data.lostPassword.count
+          this.listOfUsers = data.lostPassword.list || []
+          this.pageQuery = data.lostPassword.query || []
+          this.currentPage = UrlHelper.getUrlParamValue(this.pageQuery.first_page, 'page')
+          this.updateTableDataInfo()
         })
       })
     },
@@ -76,12 +104,26 @@ export default {
       } else {
         return `<font class="text-bold text-success"><i class="far fa-check-circle"></i>&ensp;${status}</font>`
       }
+    },
+    updateTableDataInfo (command = '') {
+      if (command === 'reboot') {
+        this.listOfUsers = []
+        this.$(() => this.$(`#${this.dataTableName}_value`).html('<font class="text-primary">Please wait...&ensp;<i class="fas fa-spinner fa-pulse"></i></font>'))
+      } else {
+        if (this.countOfData < 1) {
+          this.$(() => this.$(`#${this.dataTableName}_value`).html('<font class="text-danger">No data available in table</font>'))
+        }
+      }
     }
   },
   data () {
     return {
       asset_img: this.$AppHelper.apiEndpoint(),
-      listOfLostPassword: []
+      dataTableName: 'list-user-table',
+      listOfUsers: [],
+      pageQuery: [],
+      currentPage: 1,
+      countOfData: 0
     }
   }
 }

@@ -57,6 +57,7 @@
           </tbody>
         </table>
         <ResourcePaginate
+          paramName="unlistedUsers"
           :dataCount="countOfData"
           :query="pageQuery"
           :mainPage="currentPage"
@@ -67,6 +68,7 @@
 </template>
 
 <script>
+import UrlHelper from 'src/third-party/helper/url-helper.min'
 export default {
   name: 'AdminMenuUnlistedUsersList',
   components: {
@@ -75,18 +77,21 @@ export default {
   },
   created () {
     this.updateTableDataInfo('reboot')
-    this.getResAdminMenuUnlistedUsersList()
+    this.getResourcesData()
   },
   updated () {
     this.$(() => { this.$.fn.dataTable.ext.errMode = 'none'; this.$(`#${this.dataTableName}`).DataTable({ autoWidth: false, responsive: true, lengthChange: false, paging: false, info: false, searching: false, ordering: false }) })
   },
   methods: {
-    getResAdminMenuUnlistedUsersList () {
+    getResourcesData () {
       this.$axios.getCookies().then(() => {
         this.updateTableDataInfo('reboot')
         this.$axios.getResAdminMenuUnlistedUsersList().then((res) => {
           const data = res.data.response_data
+          this.countOfData = data.unlistedUsers.count
           this.listOfUsers = data.unlistedUsers.list || []
+          this.pageQuery = data.unlistedUsers.query || []
+          this.currentPage = UrlHelper.getUrlParamValue(this.pageQuery.first_page, 'page')
           this.updateTableDataInfo()
         })
       })

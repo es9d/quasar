@@ -57,6 +57,7 @@
           </tbody>
         </table>
         <ResourcePaginate
+          paramName="users"
           :dataCount="countOfData"
           :query="pageQuery"
           :mainPage="currentPage"
@@ -76,13 +77,13 @@ export default {
   },
   created () {
     this.updateTableDataInfo('reboot')
-    this.getResAdminMenuUsersList()
+    this.getResourcesData()
   },
   updated () {
     this.$(() => { this.$.fn.dataTable.ext.errMode = 'none'; this.$(`#${this.dataTableName}`).DataTable({ autoWidth: false, responsive: true, lengthChange: false, paging: false, info: false, searching: false, ordering: false }) })
   },
   methods: {
-    getResAdminMenuUsersList () {
+    getResourcesData () {
       this.$axios.getCookies().then(() => {
         this.updateTableDataInfo('reboot')
         this.$axios.getResAdminMenuUsersList().then((res) => {

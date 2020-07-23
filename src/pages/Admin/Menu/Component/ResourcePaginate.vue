@@ -46,6 +46,7 @@ import PagHelper from 'src/third-party/helper/paginate-helper.min'
 export default {
   name: 'ResourcePaginate',
   props: {
+    paramName: String,
     dataCount: null,
     query: null,
     mainPage: null
@@ -60,8 +61,8 @@ export default {
         this.$axios.getResAdminMenuDynamicUrl(url).then((res) => {
           if (res.data.status === 'success') {
             const data = res.data.response_data
-            this.$parent.listOfUsers = data.users.list || []
-            this.$parent.pageQuery = data.users.query || []
+            this.$parent.listOfUsers = data[`${this.paramName}`].list || []
+            this.$parent.pageQuery = data[`${this.paramName}`].query || []
             this.$parent.currentPage = UrlHelper.getUrlParamValue(url, 'page')
             this.$parent.updateTableDataInfo()
           } else {
