@@ -10,7 +10,7 @@
             class="form-control theInput"
             id="input-email"
             placeholder="E-Mail"
-            @keyup.enter="gotoSubmit"
+            @keyup.enter="sendAlertMessage"
             v-model="thisEmail"
           />
           <div class="input-group-append">
@@ -77,19 +77,14 @@ export default {
     },
     sendRequest () {
       this.$axios.getCookies().then(() => {
-        this.$axios
-          .postLostPassword(this.thisEmail)
-          .then(async res => {
-            await Swal.fire(
-              `${res.data.status === 'success' ? 'Success!' : 'Failed!'}`,
-              `${this.responseArrayMessage(res.data.message)}`,
-              `${res.data.status}`
-            )
-            return this.$router.push({ name: 'Login' })
-          })
-          .catch(async err => {
-            await Swal.fire('Oppss!', `${err.message}`, 'error')
-          })
+        this.$axios.postLostPassword(this.thisEmail).then(async res => {
+          await Swal.fire(
+            `${res.data.status === 'success' ? 'Success!' : 'Failed!'}`,
+            `${this.responseArrayMessage(res.data.message)}`,
+            `${res.data.status}`
+          )
+          return this.$router.push({ name: 'Login' })
+        }).catch(async err => await Swal.fire('Oppss!', `${err.message}`, 'error'))
       })
     },
     responseArrayMessage (data) {
@@ -104,9 +99,6 @@ export default {
         errorMsg += data
       }
       return errorMsg
-    },
-    gotoSubmit () {
-      this.$('#input-submit').click()
     }
   },
   data () {

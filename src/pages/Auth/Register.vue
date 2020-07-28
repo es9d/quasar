@@ -136,19 +136,14 @@ export default {
       })
     },
     async postNewMember () {
-      this.$axios
-        .getCookies()
-        .then(() => {
-          this.$axios
-            .postRegister(
-              this.thisName,
-              this.thisEmail,
-              ForgeJS.encryptPassword(this.thisPassword)
-            )
-            .then(async res => await this.responseRegister(res.data))
-            .catch(err => this.catchError(err))
-        })
-        .catch(err => this.catchError(err))
+      this.$axios.getCookies().then(() => {
+        this.$axios.postRegister(
+          this.thisName,
+          this.thisEmail,
+          ForgeJS.encryptPassword(this.thisPassword)
+        ).then(async res => await this.responseRegister(res.data))
+          .catch(err => this.catchError(err))
+      }).catch(err => this.catchError(err))
     },
     gotoEmail () {
       this.$('#input-email').focus()
