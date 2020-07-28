@@ -31,9 +31,9 @@ export default {
     searchUserName () {
       const getName = this.$('#searchUser').val()
       if (getName) {
-        this.$axios.getCookies().then(() => {
+        this.$axios.getCookies().then(async () => {
           this.$parent.updateTableDataInfo('reboot')
-          this.$axios.getResAdminMenuSearchUserByName(getName, this.condition).then((res) => {
+          await this.$axios.getResAdminMenuSearchUserByName(getName, this.condition).then((res) => {
             if (res.data.status === 'success') {
               const data = res.data.response_data
               this.$parent.countOfData = data.users.count
@@ -44,8 +44,8 @@ export default {
               this.$Notify.notifyResponseArray(res.data.message, 'info')
               this.$parent.countOfData = 0
             }
-            this.$parent.updateTableDataInfo()
           })
+          this.$parent.updateTableDataInfo()
         })
       } else {
         this.$parent.getResourcesData()

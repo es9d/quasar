@@ -56,18 +56,18 @@ export default {
       return PagHelper.getPaginate(UrlHelper.getUrlParamValue(this.query.last_page, 'page'), this.mainPage)
     },
     getAnotherDataPaginates (url) {
-      this.$axios.getCookies().then(() => {
+      this.$axios.getCookies().then(async () => {
         this.$parent.updateTableDataInfo('reboot')
-        this.$axios.getResAdminMenuDynamicUrl(url).then((res) => {
+        await this.$axios.getResAdminMenuDynamicUrl(url).then((res) => {
           if (res.data.status === 'success') {
             const data = res.data.response_data
             this.$parent.listOfUsers = data[`${this.paramName}`].list || []
             this.$parent.pageQuery = data[`${this.paramName}`].query || []
             this.$parent.currentPage = UrlHelper.getUrlParamValue(url, 'page')
-            this.$parent.updateTableDataInfo()
           } else {
             this.$Notify.notifyInfo(res.data.message)
           }
+          this.$parent.updateTableDataInfo()
         })
       })
     },

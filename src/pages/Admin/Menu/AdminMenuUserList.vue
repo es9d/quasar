@@ -2,66 +2,72 @@
   <div id="users-list">
     <div class="card">
       <div class="card-body table-responsive">
-        <ResourceSearch condition="" />
-        <table
-          :id="dataTableName"
-          class="table table-borderless table-hover"
-        >
-          <thead>
-            <tr class="text-center">
-              <th>Name</th>
-              <th>Active</th>
-              <th>Registered</th>
-              <th>Last Login</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(user, idx) in listOfUsers"
-              :key="idx"
-            >
-              <td>
-                <div class="user-panel d-flex">
-                  <div class="image">
-                    <img
-                      :src="asset_img+user.profile_img"
-                      class="img-circle"
-                      alt="Profile Image"
-                    />
+        <div>
+          <ResourceSearch condition="" />
+        </div>
+        <div class="table-responsive">
+          <table
+            :id="dataTableName"
+            class="table table-borderless table-hover"
+          >
+            <thead>
+              <tr class="text-center">
+                <th>Name</th>
+                <th>Active</th>
+                <th>Registered</th>
+                <th>Last Login</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(user, idx) in listOfUsers"
+                :key="idx"
+              >
+                <td>
+                  <div class="user-panel d-flex">
+                    <div class="image">
+                      <img
+                        :src="asset_img+user.profile_img"
+                        class="img-circle"
+                        alt="Profile Image"
+                      />
+                    </div>
+                    <div class="info">
+                      <router-link
+                        :to="{ name: 'AdminMenuUserDetail', params:{code:user.code} }"
+                        class="d-block"
+                      >{{user.name}}</router-link>
+                    </div>
                   </div>
-                  <div class="info">
-                    <router-link
-                      :to="{ name: 'AdminMenuUserDetail', params:{code:user.code} }"
-                      class="d-block"
-                    >{{user.name}}</router-link>
-                  </div>
-                </div>
-              </td>
-              <td
-                class="text-center"
-                v-html="userActiveConvert(user.active)"
-              />
-              <td class="text-center">{{user.registered}}</td>
-              <td class="text-center">{{user.last_login}}</td>
-            </tr>
-            <tr v-if="!listOfUsers.length">
-              <td
-                colspan="4"
-                class="text-center"
-                :id="`${dataTableName}_value`"
-              ></td>
-              <td hidden></td>
-              <td hidden></td>
-              <td hidden></td>
-            </tr>
-          </tbody>
-        </table>
-        <ResourcePaginate
-          paramName="users"
-          :dataCount="countOfData"
-          :query="pageQuery"
-          :mainPage="currentPage"
-        />
+                </td>
+                <td
+                  class="text-center"
+                  v-html="userActiveConvert(user.active)"
+                />
+                <td class="text-center">{{user.registered}}</td>
+                <td class="text-center">{{user.last_login}}</td>
+              </tr>
+              <tr v-if="!listOfUsers.length">
+                <td
+                  colspan="4"
+                  class="text-center"
+                  :id="`${dataTableName}_value`"
+                ></td>
+                <td hidden></td>
+                <td hidden></td>
+                <td hidden></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <ResourcePaginate
+            paramName="users"
+            :dataCount="countOfData"
+            :query="pageQuery"
+            :mainPage="currentPage"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -76,7 +82,6 @@ export default {
     ResourcePaginate: () => import('pages/Admin/Menu/Component/ResourcePaginate')
   },
   created () {
-    this.updateTableDataInfo('reboot')
     this.getResourcesData()
   },
   updated () {
@@ -84,16 +89,16 @@ export default {
   },
   methods: {
     getResourcesData () {
-      this.$axios.getCookies().then(() => {
+      this.$axios.getCookies().then(async () => {
         this.updateTableDataInfo('reboot')
-        this.$axios.getResAdminMenuUsersList().then((res) => {
+        await this.$axios.getResAdminMenuUsersList().then((res) => {
           const data = res.data.response_data
           this.countOfData = data.users.count
           this.listOfUsers = data.users.list || []
           this.pageQuery = data.users.query || []
           this.currentPage = UrlHelper.getUrlParamValue(this.pageQuery.first_page, 'page')
-          this.updateTableDataInfo()
         })
+        this.updateTableDataInfo()
       })
     },
     userActiveConvert (status) {
