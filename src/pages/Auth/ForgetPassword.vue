@@ -54,6 +54,7 @@
 
 <script>
 import Swal from 'sweetalert2'
+import ArrHelper from 'src/third-party/helper/arr-helper.min'
 export default {
   name: 'ForgetPassword',
   methods: {
@@ -80,25 +81,12 @@ export default {
         this.$axios.postLostPassword(this.thisEmail).then(async res => {
           await Swal.fire(
             `${res.data.status === 'success' ? 'Success!' : 'Failed!'}`,
-            `${this.responseArrayMessage(res.data.message)}`,
+            `${ArrHelper.getMessage(res.data.message, 'email')}`,
             `${res.data.status}`
           )
           return this.$router.push({ name: 'Login' })
         }).catch(async err => await Swal.fire('Oppss!', `${err.message}`, 'error'))
       })
-    },
-    responseArrayMessage (data) {
-      let errorMsg = ''
-      if (typeof data === 'object') {
-        if (data.email) {
-          data.email.forEach(msg => {
-            errorMsg += errorMsg ? `, ${msg}` : msg
-          })
-        }
-      } else {
-        errorMsg += data
-      }
-      return errorMsg
     }
   },
   data () {
